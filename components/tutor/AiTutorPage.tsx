@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ChatSidebar } from "./ChatSidebar";
 import { ChatInterface } from "./ChatInterface";
-import { Menu, X } from "lucide-react";
+import { History, Plus, MessageSquare, Clock, Trash2, Edit3 } from "lucide-react";
 
 export interface Chat {
   id: string;
@@ -46,7 +45,7 @@ export function AiTutorPage() {
   ]);
 
   const [activeChat, setActiveChat] = useState<string>("1");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showChatHistory, setShowChatHistory] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -76,7 +75,7 @@ export function AiTutorPage() {
         timestamp: new Date(),
       },
     ]);
-    setSidebarOpen(false);
+    setShowChatHistory(false);
   };
 
   const selectChat = (chatId: string) => {
@@ -93,7 +92,7 @@ export function AiTutorPage() {
         timestamp: new Date(),
       },
     ]);
-    setSidebarOpen(false);
+    setShowChatHistory(false);
   };
 
   const deleteChat = (chatId: string) => {
@@ -180,63 +179,133 @@ export function AiTutorPage() {
 
   const getCurrentChat = () => chats.find((chat) => chat.id === activeChat);
 
+  const formatTimestamp = (timestamp: Date) => {
+    const now = new Date();
+    const diffMs = now.getTime() - timestamp.getTime();
+    const diffHours = diffMs / (1000 * 60 * 60);
+    const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+    if (diffHours < 1) {
+      return "Just now";
+    } else if (diffHours < 24) {
+      return `${Math.floor(diffHours)}h ago`;
+    } else if (diffDays < 7) {
+      return `${Math.floor(diffDays)}d ago`;
+    } else {
+      return timestamp.toLocaleDateString();
+    }
+  };
+
   return (
-    <div className="flex h-[calc(100vh-5rem)] bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 rounded-lg overflow-hidden">
-      {/* Sidebar Toggle Button */}
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="fixed top-20 left-4 z-[60] p-2 bg-white rounded-lg shadow-md border border-slate-200 hover:bg-slate-50 transition-colors lg:hidden"
-      >
-        {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-      </button>
+    <div className="h-full flex flex-col lg:flex-row gap-4 p-4 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 min-h-[calc(100vh-4rem)]">
+      {/* Sidebar - Chat History */}
+      <div className="lg:w-56 flex-shrink-0">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 h-full flex flex-col">
+          {/* Header */}
+          <div className="p-4 border-b border-slate-200/50">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+                <History className="h-5 w-5 text-blue-500" />
+                Chat History
+              </h2>
+              <button
+                onClick={createNewChat}
+                className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+            </div>
+            
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-blue-50 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold text-blue-600">{chats.length}</div>
+                <div className="text-xs text-blue-600/70">Total Chats</div>
+              </div>
+              <div className="bg-purple-50 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold text-purple-600">
+                  {chats.reduce((sum, chat) => sum + chat.messageCount, 0)}
+                </div>
+                <div className="text-xs text-purple-600/70">Messages</div>
+              </div>
+            </div>
+          </div>
 
-      {/* Mobile Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-30 z-[55] lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Chat Sidebar */}
-      <div
-        className={`
-        fixed inset-y-0 left-0 z-[60] w-80 transform transition-transform duration-300 ease-in-out
-        lg:relative lg:translate-x-0 lg:z-auto lg:inset-y-auto lg:h-full
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-        ${!sidebarOpen ? "lg:w-0 lg:overflow-hidden" : "lg:w-80"}
-      `}
-      >
-        <ChatSidebar
-          chats={chats}
-          activeChat={activeChat}
-          onNewChat={createNewChat}
-          onSelectChat={selectChat}
-          onDeleteChat={deleteChat}
-          onRenameChat={renameChat}
-          onClose={() => setSidebarOpen(false)}
-        />
+          {/* Chat List */}
+          <div className="flex-1 overflow-hidden">
+            <div className="p-4 h-full">
+              <div className="space-y-3 h-full overflow-y-auto">
+                {chats.map((chat) => (
+                  <div
+                    key={chat.id}
+                    className={`group relative p-4 rounded-xl border cursor-pointer transition-all duration-200 hover:shadow-md ${
+                      activeChat === chat.id
+                        ? "bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200 shadow-sm"
+                        : "bg-white/50 border-slate-200 hover:bg-white/80"
+                    }`}
+                  >
+                    <div onClick={() => selectChat(chat.id)} className="flex-1">
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="font-medium text-slate-800 truncate text-sm pr-2">
+                          {chat.title}
+                        </h4>
+                        <div className="flex items-center gap-1 text-xs text-slate-400 flex-shrink-0">
+                          <Clock className="h-3 w-3" />
+                          {formatTimestamp(chat.timestamp)}
+                        </div>
+                      </div>
+                      
+                      <p className="text-xs text-slate-500 truncate mb-2">
+                        {chat.lastMessage || "No messages yet"}
+                      </p>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1 text-xs text-slate-400">
+                          <MessageSquare className="h-3 w-3" />
+                          {chat.messageCount} messages
+                        </div>
+                        
+                        {/* Action buttons */}
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const newTitle = prompt("Rename chat:", chat.title);
+                              if (newTitle) renameChat(chat.id, newTitle);
+                            }}
+                            className="p-1 hover:bg-slate-200 rounded text-slate-500 hover:text-slate-700"
+                          >
+                            <Edit3 className="h-3 w-3" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (confirm("Delete this chat?")) deleteChat(chat.id);
+                            }}
+                            className="p-1 hover:bg-red-100 rounded text-slate-500 hover:text-red-600"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Desktop Toggle Button */}
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="hidden lg:flex absolute top-4 left-4 z-[60] p-2 bg-white rounded-lg shadow-md border border-slate-200 hover:bg-slate-50 transition-all duration-300"
-        style={{
-          transform: sidebarOpen ? "translateX(320px)" : "translateX(0)",
-        }}
-      >
-        {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-      </button>
-
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <ChatInterface
-          messages={messages}
-          onSendMessage={sendMessage}
-          chatTitle={getCurrentChat()?.title || "New Chat"}
-          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-        />
+      {/* Main Chat Interface */}
+      <div className="flex-1 min-w-0">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 h-full overflow-hidden">
+          <ChatInterface
+            messages={messages}
+            onSendMessage={sendMessage}
+            chatTitle={getCurrentChat()?.title || "New Chat"}
+          />
+        </div>
       </div>
     </div>
   );

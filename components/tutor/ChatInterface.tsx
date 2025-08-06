@@ -1,162 +1,195 @@
-'use client'
+"use client";
 
-import { useState, useRef, useEffect } from 'react'
-import { Send, Bot, User, Copy, ThumbsUp, ThumbsDown, RotateCcw, Sparkles, Brain, BookOpen, Lightbulb, HelpCircle, Paperclip, Mic, Image } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Message } from './AiTutorPage'
+import { useState, useRef, useEffect } from "react";
+import {
+  Send,
+  Bot,
+  User,
+  Copy,
+  ThumbsUp,
+  ThumbsDown,
+  RotateCcw,
+  Sparkles,
+  Brain,
+  BookOpen,
+  Lightbulb,
+  HelpCircle,
+  Paperclip,
+  Mic,
+  Image,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Message } from "./AiTutorPage";
 
 interface ChatInterfaceProps {
-  messages: Message[]
-  onSendMessage: (content: string) => void
-  chatTitle: string
-  onToggleSidebar?: () => void
+  messages: Message[];
+  onSendMessage: (content: string) => void;
+  chatTitle: string;
 }
 
 interface QuickPrompt {
-  id: string
-  icon: React.ReactNode
-  label: string
-  prompt: string
-  color: string
+  id: string;
+  icon: React.ReactNode;
+  label: string;
+  prompt: string;
+  color: string;
 }
 
-export function ChatInterface({ messages, onSendMessage, chatTitle, onToggleSidebar }: ChatInterfaceProps) {
-  const [inputMessage, setInputMessage] = useState('')
-  const [isTyping, setIsTyping] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+export function ChatInterface({
+  messages,
+  onSendMessage,
+  chatTitle,
+}: ChatInterfaceProps) {
+  const [inputMessage, setInputMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const quickPrompts: QuickPrompt[] = [
     {
-      id: 'explain',
+      id: "explain",
       icon: <Brain className="h-5 w-5" />,
-      label: 'Explain a concept',
-      prompt: 'Can you explain this concept in detail with examples?',
-      color: 'border-blue-200 hover:bg-blue-50 text-blue-700'
+      label: "Explain a concept",
+      prompt: "Can you explain this concept in detail with examples?",
+      color: "border-blue-200 hover:bg-blue-50 text-blue-700",
     },
     {
-      id: 'summarize',
+      id: "summarize",
       icon: <BookOpen className="h-5 w-5" />,
-      label: 'Summarize topic',
-      prompt: 'Can you provide a comprehensive summary of this topic?',
-      color: 'border-green-200 hover:bg-green-50 text-green-700'
+      label: "Summarize topic",
+      prompt: "Can you provide a comprehensive summary of this topic?",
+      color: "border-green-200 hover:bg-green-50 text-green-700",
     },
     {
-      id: 'examples',
+      id: "examples",
       icon: <Lightbulb className="h-5 w-5" />,
-      label: 'Give examples',
-      prompt: 'Can you provide practical examples and case studies?',
-      color: 'border-amber-200 hover:bg-amber-50 text-amber-700'
+      label: "Give examples",
+      prompt: "Can you provide practical examples and case studies?",
+      color: "border-amber-200 hover:bg-amber-50 text-amber-700",
     },
     {
-      id: 'quiz',
+      id: "quiz",
       icon: <HelpCircle className="h-5 w-5" />,
-      label: 'Test my knowledge',
-      prompt: 'Create a practice quiz to test my understanding of this topic',
-      color: 'border-purple-200 hover:bg-purple-50 text-purple-700'
-    }
-  ]
+      label: "Test my knowledge",
+      prompt: "Create a practice quiz to test my understanding of this topic",
+      color: "border-purple-200 hover:bg-purple-50 text-purple-700",
+    },
+  ];
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     // Check if AI is typing based on last message timing
-    const lastMessage = messages[messages.length - 1]
-    if (lastMessage && lastMessage.type === 'user') {
-      setIsTyping(true)
-      const timer = setTimeout(() => setIsTyping(false), 3000)
-      return () => clearTimeout(timer)
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage && lastMessage.type === "user") {
+      setIsTyping(true);
+      const timer = setTimeout(() => setIsTyping(false), 3000);
+      return () => clearTimeout(timer);
     }
-  }, [messages])
+  }, [messages]);
 
   const handleSendMessage = () => {
-    if (!inputMessage.trim()) return
+    if (!inputMessage.trim()) return;
 
-    onSendMessage(inputMessage.trim())
-    setInputMessage('')
-    
+    onSendMessage(inputMessage.trim());
+    setInputMessage("");
+
     // Reset textarea height
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = "auto";
     }
-  }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage()
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
     }
-  }
+  };
 
   const handleQuickPrompt = (prompt: QuickPrompt) => {
-    setInputMessage(prompt.prompt)
-    textareaRef.current?.focus()
-  }
+    setInputMessage(prompt.prompt);
+    textareaRef.current?.focus();
+  };
 
   const copyMessage = (content: string) => {
-    navigator.clipboard.writeText(content)
+    navigator.clipboard.writeText(content);
     // Could add toast notification here
-  }
+  };
 
   const adjustTextareaHeight = () => {
-    const textarea = textareaRef.current
+    const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = 'auto'
-      textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px'
+      textarea.style.height = "auto";
+      textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px";
     }
-  }
+  };
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-transparent overflow-hidden">
       {/* Chat Header */}
-      <div className="border-b border-slate-200 p-4 bg-white/80 backdrop-blur-sm">
+      <div className="border-b border-slate-200/50 p-4 bg-gradient-to-r from-blue-50/50 to-purple-50/50 backdrop-blur-sm flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-            <Bot className="h-6 w-6 text-white" />
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+            <Bot className="h-7 w-7 text-white" />
           </div>
-          <div>
-            <h1 className="font-semibold text-slate-900 text-lg">{chatTitle}</h1>
-            <div className="flex items-center gap-2 text-sm text-slate-500">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              Maia AI Tutor - Online
+          <div className="flex-1">
+            <h1 className="font-bold text-slate-900 text-xl">
+              {chatTitle}
+            </h1>
+            <div className="flex items-center gap-2 text-sm text-slate-600">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              Maia AI Tutor - Ready to help
             </div>
           </div>
-          <div className="ml-auto">
-            <Sparkles className="h-5 w-5 text-purple-500" />
+          <div className="flex items-center gap-2">
+            <div className="bg-white/50 rounded-lg px-3 py-1 text-sm text-slate-600 font-medium">
+              {messages.length} messages
+            </div>
+            <Sparkles className="h-6 w-6 text-purple-500" />
           </div>
         </div>
       </div>
 
       {/* Messages Area */}
-      <ScrollArea className="flex-1 p-4">
-        <div className="max-w-4xl mx-auto space-y-6">
+      <ScrollArea className="flex-1 p-4 bg-gradient-to-b from-transparent to-slate-50/30">
+        <div className="max-w-5xl mx-auto space-y-6">
           {/* Quick Prompts - Show only if no messages yet or just welcome message */}
           {messages.length <= 1 && (
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-slate-800 mb-4 flex items-center gap-2">
-                <Brain className="h-6 w-6 text-blue-500" />
-                How can I help you today?
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="text-center mb-6">
+                <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center justify-center gap-3">
+                  <Brain className="h-8 w-8 text-blue-500" />
+                  How can I help you today?
+                </h2>
+                <p className="text-slate-600 max-w-2xl mx-auto">
+                  Choose a quick prompt below or ask me anything about CRMA exam preparation, risk management concepts, or study strategies.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {quickPrompts.map((prompt) => (
                   <button
                     key={prompt.id}
                     onClick={() => handleQuickPrompt(prompt)}
-                    className={`p-4 rounded-xl border-2 transition-all duration-200 hover:scale-[1.02] text-left ${prompt.color}`}
+                    className={`p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg text-left bg-white/50 backdrop-blur-sm ${prompt.color}`}
                   >
-                    <div className="flex items-center gap-3 mb-2">
-                      {prompt.icon}
-                      <span className="font-medium">{prompt.label}</span>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 rounded-lg bg-white/80">
+                        {prompt.icon}
+                      </div>
+                      <span className="font-bold text-lg">{prompt.label}</span>
                     </div>
-                    <p className="text-sm opacity-75">{prompt.prompt}</p>
+                    <p className="text-sm opacity-80 leading-relaxed">
+                      {prompt.prompt}
+                    </p>
                   </button>
                 ))}
               </div>
@@ -167,33 +200,42 @@ export function ChatInterface({ messages, onSendMessage, chatTitle, onToggleSide
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex gap-4 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex gap-4 sm:gap-6 ${
+                message.type === "user" ? "justify-end" : "justify-start"
+              }`}
             >
-              {message.type === 'ai' && (
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Bot className="h-4 w-4 text-white" />
+              {message.type === "ai" && (
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Bot className="h-5 w-5 text-white" />
                 </div>
               )}
-              
-              <div className={`group max-w-3xl ${message.type === 'user' ? 'order-first' : ''}`}>
+
+              <div
+                className={`group max-w-3xl ${
+                  message.type === "user" ? "order-first" : ""
+                }`}
+              >
                 <div
-                  className={`p-4 rounded-2xl shadow-sm border ${
-                    message.type === 'user'
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white ml-auto'
-                      : 'bg-slate-50 border-slate-200 text-slate-800'
+                  className={`p-4 rounded-2xl shadow-lg border ${
+                    message.type === "user"
+                      ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white ml-auto shadow-blue-200"
+                      : "bg-white/80 backdrop-blur-sm border-slate-200 text-slate-800 shadow-slate-200"
                   }`}
                 >
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                  <p className="leading-relaxed whitespace-pre-wrap">
                     {message.content}
                   </p>
                 </div>
-                
+
                 <div className="flex items-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <span className="text-xs text-slate-500">
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {message.timestamp.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </span>
-                  
-                  {message.type === 'ai' && (
+
+                  {message.type === "ai" && (
                     <div className="flex items-center gap-1 ml-2">
                       <Button
                         variant="ghost"
@@ -221,57 +263,65 @@ export function ChatInterface({ messages, onSendMessage, chatTitle, onToggleSide
                   )}
                 </div>
               </div>
-              
-              {message.type === 'user' && (
-                <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <User className="h-4 w-4 text-white" />
+
+              {message.type === "user" && (
+                <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <User className="h-5 w-5 text-white" />
                 </div>
               )}
             </div>
           ))}
-          
+
           {/* Typing Indicator */}
           {isTyping && (
-            <div className="flex gap-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                <Bot className="h-4 w-4 text-white" />
+            <div className="flex gap-4 sm:gap-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                <Bot className="h-5 w-5 text-white" />
               </div>
               <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl shadow-sm">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-1">
                     <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse"></div>
-                    <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                    <div
+                      className="w-2 h-2 bg-slate-400 rounded-full animate-pulse"
+                      style={{ animationDelay: "0.2s" }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-slate-400 rounded-full animate-pulse"
+                      style={{ animationDelay: "0.4s" }}
+                    ></div>
                   </div>
-                  <span className="text-sm text-slate-500">Maia is thinking...</span>
+                  <span className="text-sm text-slate-500">
+                    Maia is thinking...
+                  </span>
                 </div>
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
       </ScrollArea>
 
       {/* Input Area */}
-      <div className="border-t border-slate-200 p-4 bg-white">
-        <div className="max-w-4xl mx-auto">
+      <div className="border-t border-slate-200/50 p-4 bg-gradient-to-r from-blue-50/30 to-purple-50/30 backdrop-blur-sm flex-shrink-0">
+        <div className="max-w-5xl mx-auto">
           <div className="relative">
-            <div className="flex items-end gap-3 bg-slate-50 border border-slate-200 rounded-2xl p-3 focus-within:border-blue-300 focus-within:ring-1 focus-within:ring-blue-300 transition-all">
+            <div className="flex items-end gap-3 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl p-4 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all shadow-lg">
               <Textarea
                 ref={textareaRef}
                 value={inputMessage}
                 onChange={(e) => {
-                  setInputMessage(e.target.value)
-                  adjustTextareaHeight()
+                  setInputMessage(e.target.value);
+                  adjustTextareaHeight();
                 }}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask Maia anything about CRMA preparation..."
-                className="flex-1 min-h-[20px] max-h-[120px] border-none bg-transparent resize-none focus:ring-0 focus:outline-none text-sm"
+                className="flex-1 min-h-[24px] max-h-[120px] border-none bg-transparent resize-none focus:ring-0 focus:outline-none"
                 disabled={isTyping}
                 rows={1}
               />
-              
+
               <div className="flex items-center gap-2 flex-shrink-0">
                 <Button
                   variant="ghost"
@@ -280,7 +330,7 @@ export function ChatInterface({ messages, onSendMessage, chatTitle, onToggleSide
                 >
                   <Paperclip className="h-4 w-4 text-slate-500" />
                 </Button>
-                
+
                 <Button
                   variant="ghost"
                   size="sm"
@@ -288,7 +338,7 @@ export function ChatInterface({ messages, onSendMessage, chatTitle, onToggleSide
                 >
                   <Image className="h-4 w-4 text-slate-500" />
                 </Button>
-                
+
                 <Button
                   variant="ghost"
                   size="sm"
@@ -296,17 +346,17 @@ export function ChatInterface({ messages, onSendMessage, chatTitle, onToggleSide
                 >
                   <Mic className="h-4 w-4 text-slate-500" />
                 </Button>
-                
+
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim() || isTyping}
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl px-4 h-10 shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50"
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl px-6 h-12 shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 font-medium"
                 >
-                  <Send className="h-4 w-4" />
+                  <Send className="h-5 w-5" />
                 </Button>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between mt-2 text-xs text-slate-500">
               <span>Press Enter to send, Shift+Enter for new line</span>
               <div className="flex items-center gap-3">
@@ -322,5 +372,5 @@ export function ChatInterface({ messages, onSendMessage, chatTitle, onToggleSide
         </div>
       </div>
     </div>
-  )
+  );
 }

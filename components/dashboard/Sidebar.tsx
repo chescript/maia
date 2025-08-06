@@ -74,7 +74,7 @@ export function Sidebar({ onClose }: SidebarProps) {
     {
       icon: <BookOpen className="h-5 w-5" />,
       label: "Content (Units)",
-      href: "/content",
+      href: "/dashboard/content",
       isActive: activeNav === "content",
     },
     {
