@@ -12,6 +12,7 @@ import {
   GraduationCap,
   ChevronRight,
   X,
+  Bot,
 } from "lucide-react";
 
 interface AIPrompt {
@@ -63,6 +64,12 @@ export function Sidebar({ onClose }: SidebarProps) {
       label: "Dashboard",
       href: "/dashboard",
       isActive: activeNav === "dashboard",
+    },
+    {
+      icon: <Bot className="h-5 w-5" />,
+      label: "AI Tutor",
+      href: "/dashboard/tutor",
+      isActive: activeNav === "tutor",
     },
     {
       icon: <BookOpen className="h-5 w-5" />,
