@@ -80,38 +80,40 @@ export function ModulesProgress() {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "Easy":
-        return "bg-green-100 text-green-800";
+        return "bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-700 border border-emerald-200";
       case "Intermediate":
-        return "bg-blue-100 text-blue-800";
+        return "bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 border border-blue-200";
       case "High":
-        return "bg-red-100 text-red-800";
+        return "bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 border border-orange-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gradient-to-r from-gray-100 to-slate-100 text-gray-700 border border-gray-200";
     }
   };
 
   const getActionButton = (module: Module) => {
+    const href = `/dashboard/unit/${module.id}`;
+    
     switch (module.status) {
       case "completed":
         return (
-          <button className="flex items-center space-x-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors">
+          <a href={href} className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-lg hover:from-emerald-600 hover:to-green-600 transition-all duration-200 shadow-sm">
             <RotateCcw className="h-4 w-4" />
             <span>Review</span>
-          </button>
+          </a>
         );
       case "in-progress":
         return (
-          <button className="flex items-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+          <a href={href} className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 shadow-sm">
             <Play className="h-4 w-4" />
             <span>Continue</span>
-          </button>
+          </a>
         );
       case "not-started":
         return (
-          <button className="flex items-center space-x-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:bg-accent/80 transition-colors">
+          <a href={href} className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-violet-500 text-white rounded-lg hover:from-purple-600 hover:to-violet-600 transition-all duration-200 shadow-sm">
             <Play className="h-4 w-4" />
             <span>Start</span>
-          </button>
+          </a>
         );
     }
   };
@@ -128,13 +130,15 @@ export function ModulesProgress() {
   };
 
   return (
-    <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
+    <div className="bg-gradient-to-br from-slate-50 via-white to-indigo-50 rounded-2xl border border-slate-200/50 p-6 shadow-lg">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-card-foreground flex items-center">
-          <BookOpen className="h-6 w-6 mr-2 text-primary" />
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-indigo-600 bg-clip-text text-transparent flex items-center">
+          <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center mr-3">
+            <BookOpen className="h-5 w-5 text-white" />
+          </div>
           Modules Progress
         </h2>
-        <div className="text-sm text-muted-foreground">
+        <div className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm font-medium rounded-full">
           {modules.filter((m) => m.status === "completed").length} of{" "}
           {modules.length} completed
         </div>
@@ -144,7 +148,7 @@ export function ModulesProgress() {
         {modules.map((module) => (
           <div
             key={module.id}
-            className="bg-card border border-border rounded-lg p-4 hover:shadow-md transition-shadow"
+            className="bg-white/70 backdrop-blur-sm border border-slate-200/50 rounded-xl p-5 hover:shadow-lg hover:bg-white/90 transition-all duration-200 hover:-translate-y-1"
           >
             {/* Header */}
             <div className="flex items-start justify-between mb-3">
@@ -173,11 +177,11 @@ export function ModulesProgress() {
               </div>
               <div className="w-full bg-muted rounded-full h-2">
                 <div
-                  className={`h-2 rounded-full transition-all duration-500 ${
+                  className={`h-3 rounded-full transition-all duration-500 ${
                     module.progress === 100
-                      ? "bg-green-500"
+                      ? "bg-gradient-to-r from-emerald-400 to-green-500"
                       : module.progress > 0
-                      ? "bg-primary"
+                      ? "bg-gradient-to-r from-blue-400 to-indigo-500"
                       : "bg-muted"
                   }`}
                   style={{ width: `${module.progress}%` }}

@@ -1,6 +1,3 @@
-import { TopBar } from '@/components/unit/TopBar'
-import { TabsContainer } from '@/components/unit/TabsContainer'
-import { AiTutorSidebar } from '@/components/unit/AiTutorSidebar'
 import { Metadata } from 'next'
 import { UnitPageClient } from '@/components/unit/UnitPageClient'
 

@@ -15,6 +15,7 @@ interface AiTutorSidebarProps {
   unitProgress: number
   selectedText: string
   onTextExplanation: (text: string) => void
+  onClose?: () => void
 }
 
 interface Message {
@@ -34,7 +35,7 @@ interface QuickPrompt {
   category: 'explain' | 'summarize' | 'tips' | 'quiz'
 }
 
-export function AiTutorSidebar({ unitId, unitProgress, selectedText, onTextExplanation }: AiTutorSidebarProps) {
+export function AiTutorSidebar({ unitId, unitProgress, selectedText, onTextExplanation, onClose }: AiTutorSidebarProps) {
   const [isMinimized, setIsMinimized] = useState(false)
   const [isExpanded, setIsExpanded] = useState(true)
   const [messages, setMessages] = useState<Message[]>([
@@ -184,17 +185,17 @@ export function AiTutorSidebar({ unitId, unitProgress, selectedText, onTextExpla
   }
 
   return (
-    <div className="w-80 h-full bg-white border-l border-gray-200 flex flex-col">
+    <div className="w-80 h-full bg-gradient-to-b from-white via-blue-50/30 to-purple-50/30 backdrop-blur-sm border-l border-slate-200/50 shadow-xl flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+      <div className="p-4 border-b border-slate-200/50 bg-gradient-to-r from-blue-50/80 to-purple-50/80 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <div className="p-2 bg-blue-100 rounded-full">
-              <Bot className="h-5 w-5 text-blue-600" />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-md">
+              <Bot className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">Maia AI Tutor</h3>
-              <p className="text-xs text-gray-600">Your learning companion</p>
+              <h3 className="font-bold text-slate-800">Maia AI Tutor</h3>
+              <p className="text-xs text-slate-500 font-medium">Your learning companion</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
@@ -202,15 +203,27 @@ export function AiTutorSidebar({ unitId, unitProgress, selectedText, onTextExpla
               variant="ghost"
               size="sm"
               onClick={() => setIsExpanded(!isExpanded)}
+              className="hover:bg-blue-50"
             >
-              {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              {isExpanded ? <ChevronUp className="h-4 w-4 text-slate-600" /> : <ChevronDown className="h-4 w-4 text-slate-600" />}
             </Button>
+            {onClose && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onClose}
+                className="xl:hidden hover:bg-blue-50"
+              >
+                <X className="h-4 w-4 text-slate-600" />
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsMinimized(true)}
+              className="hidden xl:block hover:bg-blue-50"
             >
-              <Minimize2 className="h-4 w-4" />
+              <Minimize2 className="h-4 w-4 text-slate-600" />
             </Button>
           </div>
         </div>
