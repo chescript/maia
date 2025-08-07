@@ -17,6 +17,7 @@ import {
   ChevronRight,
   Star,
   BarChart3,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,7 +54,8 @@ const units: Unit[] = [
   {
     id: "1",
     title: "Risk Management Fundamentals",
-    description: "Introduction to risk management principles, frameworks, and basic concepts essential for CRMA certification.",
+    description:
+      "Introduction to risk management principles, frameworks, and basic concepts essential for CRMA certification.",
     progress: 85,
     totalLessons: 12,
     completedLessons: 10,
@@ -68,7 +70,8 @@ const units: Unit[] = [
   {
     id: "2",
     title: "Risk Assessment Methodologies",
-    description: "Deep dive into various risk assessment techniques, quantitative and qualitative approaches.",
+    description:
+      "Deep dive into various risk assessment techniques, quantitative and qualitative approaches.",
     progress: 60,
     totalLessons: 15,
     completedLessons: 9,
@@ -83,7 +86,8 @@ const units: Unit[] = [
   {
     id: "3",
     title: "Internal Controls & Governance",
-    description: "Understanding internal control systems, governance structures, and compliance frameworks.",
+    description:
+      "Understanding internal control systems, governance structures, and compliance frameworks.",
     progress: 30,
     totalLessons: 18,
     completedLessons: 5,
@@ -98,7 +102,8 @@ const units: Unit[] = [
   {
     id: "4",
     title: "Advanced Risk Analytics",
-    description: "Statistical methods, modeling techniques, and advanced analytics for risk management.",
+    description:
+      "Statistical methods, modeling techniques, and advanced analytics for risk management.",
     progress: 0,
     totalLessons: 20,
     completedLessons: 0,
@@ -112,7 +117,8 @@ const units: Unit[] = [
   {
     id: "5",
     title: "Regulatory Compliance",
-    description: "Comprehensive coverage of regulatory requirements, compliance monitoring, and reporting.",
+    description:
+      "Comprehensive coverage of regulatory requirements, compliance monitoring, and reporting.",
     progress: 0,
     totalLessons: 14,
     completedLessons: 0,
@@ -126,7 +132,8 @@ const units: Unit[] = [
   {
     id: "6",
     title: "Crisis Management & Business Continuity",
-    description: "Strategies for crisis response, business continuity planning, and disaster recovery.",
+    description:
+      "Strategies for crisis response, business continuity planning, and disaster recovery.",
     progress: 0,
     totalLessons: 16,
     completedLessons: 0,
@@ -139,7 +146,15 @@ const units: Unit[] = [
   },
 ];
 
-const categories = ["All", "Foundation", "Assessment", "Governance", "Analytics", "Compliance", "Crisis Management"];
+const categories = [
+  "All",
+  "Foundation",
+  "Assessment",
+  "Governance",
+  "Analytics",
+  "Compliance",
+  "Crisis Management",
+];
 const difficulties = ["All", "Beginner", "Intermediate", "Advanced"];
 
 export default function ContentPage() {
@@ -149,20 +164,27 @@ export default function ContentPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   const filteredUnits = units.filter((unit) => {
-    const matchesSearch = unit.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         unit.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || unit.category === selectedCategory;
-    const matchesDifficulty = selectedDifficulty === "All" || unit.difficulty === selectedDifficulty;
-    
+    const matchesSearch =
+      unit.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      unit.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "All" || unit.category === selectedCategory;
+    const matchesDifficulty =
+      selectedDifficulty === "All" || unit.difficulty === selectedDifficulty;
+
     return matchesSearch && matchesCategory && matchesDifficulty;
   });
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "Beginner": return "bg-green-100 text-green-800";
-      case "Intermediate": return "bg-yellow-100 text-yellow-800";
-      case "Advanced": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "Beginner":
+        return "bg-green-100 text-green-800";
+      case "Intermediate":
+        return "bg-yellow-100 text-yellow-800";
+      case "Advanced":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -173,9 +195,13 @@ export default function ContentPage() {
   };
 
   const totalUnits = units.length;
-  const completedUnits = units.filter(unit => unit.progress === 100).length;
-  const inProgressUnits = units.filter(unit => unit.progress > 0 && unit.progress < 100).length;
-  const overallProgress = Math.round(units.reduce((acc, unit) => acc + unit.progress, 0) / totalUnits);
+  const completedUnits = units.filter((unit) => unit.progress === 100).length;
+  const inProgressUnits = units.filter(
+    (unit) => unit.progress > 0 && unit.progress < 100
+  ).length;
+  const overallProgress = Math.round(
+    units.reduce((acc, unit) => acc + unit.progress, 0) / totalUnits
+  );
 
   return (
     <div className="space-y-6">
@@ -194,7 +220,9 @@ export default function ContentPage() {
               <div className="text-sm text-blue-100">Overall Progress</div>
             </div>
             <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold">{completedUnits}/{totalUnits}</div>
+              <div className="text-2xl font-bold">
+                {completedUnits}/{totalUnits}
+              </div>
               <div className="text-sm text-blue-100">Units Completed</div>
             </div>
           </div>
@@ -210,13 +238,15 @@ export default function ContentPage() {
                 <CheckCircle className="h-5 w-5 text-green-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-green-600">{completedUnits}</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {completedUnits}
+                </div>
                 <div className="text-sm text-gray-600">Completed Units</div>
               </div>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -224,13 +254,15 @@ export default function ContentPage() {
                 <Play className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-blue-600">{inProgressUnits}</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {inProgressUnits}
+                </div>
                 <div className="text-sm text-gray-600">In Progress</div>
               </div>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -238,7 +270,9 @@ export default function ContentPage() {
                 <Award className="h-5 w-5 text-purple-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-purple-600">{totalUnits - completedUnits - inProgressUnits}</div>
+                <div className="text-2xl font-bold text-purple-600">
+                  {totalUnits - completedUnits - inProgressUnits}
+                </div>
                 <div className="text-sm text-gray-600">Not Started</div>
               </div>
             </div>
@@ -260,7 +294,7 @@ export default function ContentPage() {
               />
             </div>
           </div>
-          
+
           <div className="flex gap-2">
             <Button
               variant="outline"
@@ -272,32 +306,40 @@ export default function ContentPage() {
             </Button>
           </div>
         </div>
-        
+
         {showFilters && (
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category
+                </label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   {categories.map((category) => (
-                    <option key={category} value={category}>{category}</option>
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
                   ))}
                 </select>
               </div>
-              
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Difficulty</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Difficulty
+                </label>
                 <select
                   value={selectedDifficulty}
                   onChange={(e) => setSelectedDifficulty(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   {difficulties.map((difficulty) => (
-                    <option key={difficulty} value={difficulty}>{difficulty}</option>
+                    <option key={difficulty} value={difficulty}>
+                      {difficulty}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -306,94 +348,109 @@ export default function ContentPage() {
         )}
       </div>
 
-      {/* Units Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {filteredUnits.map((unit) => (
-          <Card key={unit.id} className={`hover:shadow-lg transition-all duration-200 ${unit.isLocked ? 'opacity-60' : 'hover:scale-[1.02]'}`}>
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <CardTitle className="text-lg mb-2 flex items-center gap-2">
-                    <BookOpen className="h-5 w-5 text-blue-600" />
-                    {unit.title}
-                    {unit.isLocked && <Badge variant="secondary">Locked</Badge>}
-                  </CardTitle>
-                  <p className="text-gray-600 text-sm leading-relaxed">{unit.description}</p>
+      {/* Units List */}
+      <div className="bg-white rounded-2xl border border-slate-200/50 p-6 shadow-sm">
+        <div className="space-y-4">
+          {filteredUnits.map((unit) => (
+            <div
+              key={unit.id}
+              className={`flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl hover:shadow-sm transition-all duration-200 ${
+                unit.isLocked ? "opacity-60" : ""
+              }`}
+            >
+              {/* Left Section - Icon and Title */}
+              <div className="flex items-center space-x-4">
+                <div className={`w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center ${unit.isLocked ? 'opacity-50' : ''}`}>
+                  {unit.progress === 100 ? (
+                    <CheckCircle className="h-4 w-4 text-white" />
+                  ) : unit.progress > 0 ? (
+                    <Play className="h-4 w-4 text-white" />
+                  ) : (
+                    <BookOpen className="h-4 w-4 text-white" />
+                  )}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-slate-800 text-sm">
+                      {unit.title}
+                    </h3>
+                    {unit.isLocked && <Badge variant="secondary" className="text-xs">Locked</Badge>}
+                  </div>
+                  <div className="flex items-center space-x-4 mt-1">
+                    <div className="flex items-center space-x-1 text-xs text-slate-500">
+                      <span>Progress</span>
+                    </div>
+                    <div className="w-32 bg-slate-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-500 rounded-full h-2 transition-all duration-500"
+                        style={{ width: `${unit.progress}%` }}
+                      />
+                    </div>
+                    <span className="text-xs text-slate-600">
+                      {unit.progress}%
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-4 mt-2 text-xs text-slate-500">
+                    <span className="flex items-center space-x-1">
+                      <span className={`px-2 py-1 rounded-full text-xs ${getDifficultyColor(unit.difficulty)}`}>
+                        {unit.difficulty}
+                      </span>
+                    </span>
+                    <span className="flex items-center space-x-1">
+                      <FileText className="h-3 w-3" />
+                      <span>{unit.completedLessons}/{unit.totalLessons} lessons</span>
+                    </span>
+                    <span className="flex items-center space-x-1">
+                      <Clock className="h-3 w-3" />
+                      <span>{unit.estimatedTime}</span>
+                    </span>
+                  </div>
                 </div>
               </div>
               
-              <div className="flex flex-wrap gap-2 mt-3">
-                <Badge className={getDifficultyColor(unit.difficulty)}>
-                  {unit.difficulty}
-                </Badge>
-                <Badge variant="outline">{unit.category}</Badge>
-                <div className="flex items-center gap-1 text-sm text-gray-500">
-                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                  {unit.rating}
-                </div>
-              </div>
-            </CardHeader>
-            
-            <CardContent className="pt-0">
-              <div className="space-y-4">
-                {/* Progress */}
-                <div>
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-600">Progress</span>
-                    <span className="font-medium">{unit.progress}%</span>
-                  </div>
-                  <Progress value={unit.progress} className="h-2" />
-                </div>
-                
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <FileText className="h-4 w-4" />
-                    <span>{unit.completedLessons}/{unit.totalLessons} lessons</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Clock className="h-4 w-4" />
-                    <span>{unit.estimatedTime}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Users className="h-4 w-4" />
-                    <span>{unit.enrolledStudents.toLocaleString()} students</span>
-                  </div>
-                  {unit.lastAccessed && (
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Clock className="h-4 w-4" />
-                      <span>Last: {unit.lastAccessed}</span>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Action Button */}
-                <Button 
-                  className="w-full mt-4" 
+              {/* Right Section - Action Button */}
+              <div className="flex items-center space-x-3">
+                <Button
+                  className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 shadow-sm"
                   disabled={unit.isLocked}
-                  onClick={() => window.location.href = `/dashboard/unit/${unit.id}`}
+                  onClick={() =>
+                    (window.location.href = `/dashboard/unit/${unit.id}`)
+                  }
                 >
                   {unit.isLocked ? (
-                    "Complete previous units to unlock"
+                    "Locked"
                   ) : unit.progress === 0 ? (
-                    <>Start Learning <ChevronRight className="h-4 w-4 ml-1" /></>
+                    <>
+                      <Play className="h-4 w-4" />
+                      <span>Start</span>
+                    </>
                   ) : unit.progress === 100 ? (
-                    <>Review Unit <ChevronRight className="h-4 w-4 ml-1" /></>
+                    <>
+                      <RotateCcw className="h-4 w-4" />
+                      <span>Review</span>
+                    </>
                   ) : (
-                    <>Continue Learning <ChevronRight className="h-4 w-4 ml-1" /></>
+                    <>
+                      <Play className="h-4 w-4" />
+                      <span>Continue</span>
+                    </>
                   )}
                 </Button>
               </div>
-            </CardContent>
-          </Card>
-        ))}
+            </div>
+          ))}
+        </div>
       </div>
-      
+
       {filteredUnits.length === 0 && (
         <div className="text-center py-12">
           <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No units found</h3>
-          <p className="text-gray-600">Try adjusting your search terms or filters.</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            No units found
+          </h3>
+          <p className="text-gray-600">
+            Try adjusting your search terms or filters.
+          </p>
         </div>
       )}
     </div>

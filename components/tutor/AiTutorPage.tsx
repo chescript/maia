@@ -2,7 +2,14 @@
 
 import { useState } from "react";
 import { ChatInterface } from "./ChatInterface";
-import { History, Plus, MessageSquare, Clock, Trash2, Edit3 } from "lucide-react";
+import {
+  History,
+  Plus,
+  MessageSquare,
+  Clock,
+  Trash2,
+  Edit3,
+} from "lucide-react";
 
 export interface Chat {
   id: string;
@@ -215,11 +222,13 @@ export function AiTutorPage() {
                 <Plus className="h-4 w-4" />
               </button>
             </div>
-            
+
             {/* Stats */}
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-blue-50 rounded-lg p-3 text-center">
-                <div className="text-2xl font-bold text-blue-600">{chats.length}</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {chats.length}
+                </div>
                 <div className="text-xs text-blue-600/70">Total Chats</div>
               </div>
               <div className="bg-purple-50 rounded-lg p-3 text-center">
@@ -254,23 +263,26 @@ export function AiTutorPage() {
                           {formatTimestamp(chat.timestamp)}
                         </div>
                       </div>
-                      
+
                       <p className="text-xs text-slate-500 truncate mb-2">
                         {chat.lastMessage || "No messages yet"}
                       </p>
-                      
+
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1 text-xs text-slate-400">
                           <MessageSquare className="h-3 w-3" />
                           {chat.messageCount} messages
                         </div>
-                        
+
                         {/* Action buttons */}
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              const newTitle = prompt("Rename chat:", chat.title);
+                              const newTitle = prompt(
+                                "Rename chat:",
+                                chat.title
+                              );
                               if (newTitle) renameChat(chat.id, newTitle);
                             }}
                             className="p-1 hover:bg-slate-200 rounded text-slate-500 hover:text-slate-700"
@@ -280,7 +292,8 @@ export function AiTutorPage() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              if (confirm("Delete this chat?")) deleteChat(chat.id);
+                              if (confirm("Delete this chat?"))
+                                deleteChat(chat.id);
                             }}
                             className="p-1 hover:bg-red-100 rounded text-slate-500 hover:text-red-600"
                           >

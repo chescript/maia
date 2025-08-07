@@ -573,26 +573,6 @@ export function AiTutorChat({ unitId, selectedText }: AiTutorChatProps) {
         </div>
       </div>
 
-      {/* Right Sidebar - Quick Actions */}
-      <div className="w-80 bg-white/80 backdrop-blur-sm border-l border-slate-200/50 p-4 shadow-lg">
-        <div className="space-y-4">
-          {quickActions.map((action) => (
-            <button
-              key={action.id}
-              onClick={() => handleQuickAction(action)}
-              className={`w-full p-4 rounded-2xl border-2 transition-all duration-200 hover:scale-[1.02] text-left ${action.color}`}
-            >
-              <div className="flex items-center gap-3 mb-3">
-                {action.icon}
-                <span className="font-semibold">{action.label}</span>
-              </div>
-              <p className="text-sm opacity-75 leading-relaxed">
-                {action.prompt}
-              </p>
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
