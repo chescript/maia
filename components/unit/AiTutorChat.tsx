@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Send, Sparkles, Bot, User, Copy, ThumbsUp, ThumbsDown, RotateCcw, BookOpen, Brain, Lightbulb, HelpCircle, Mic, Image, Paperclip } from 'lucide-react'
+import { Send, Sparkles, Bot, User, Copy, ThumbsUp, ThumbsDown, RotateCcw, BookOpen, Brain, Lightbulb, HelpCircle, Mic, Image, Paperclip, Plus, Clock, MessageSquare, Edit3, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 interface Message {
@@ -22,53 +22,85 @@ interface QuickAction {
   color: string
 }
 
+interface Chat {
+  id: string
+  title: string
+  lastMessage: string
+  timestamp: Date
+  messageCount: number
+}
+
 interface AiTutorChatProps {
   unitId?: string
   selectedText?: string
 }
 
 export function AiTutorChat({ unitId, selectedText }: AiTutorChatProps) {
+  const [chats, setChats] = useState<Chat[]>([
+    {
+      id: '1',
+      title: 'Risk Management Fundamentals',
+      lastMessage: 'Can you explain the key principles...',
+      timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+      messageCount: 12
+    },
+    {
+      id: '2',
+      title: 'CRMA Exam Strategy',
+      lastMessage: 'What are the best study techniques...',
+      timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+      messageCount: 8
+    },
+    {
+      id: '3',
+      title: 'Risk Assessment Methods',
+      lastMessage: 'How do I perform a comprehensive...',
+      timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+      messageCount: 15
+    }
+  ])
+  const [activeChat, setActiveChat] = useState<string>('1')
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       type: 'ai',
-      content: "Hi! I'm Maia, your AI tutor. I'm here to help you master this unit. You can ask me questions, request explanations, or use the quick actions below. What would you like to learn about?",
+      content: "Hello! I'm Maia, your AI tutor for CRMA exam preparation. I'm here to help you understand complex risk management concepts, practice exam questions, and develop effective study strategies. What would you like to explore today?",
       timestamp: new Date()
     }
   ])
   const [inputMessage, setInputMessage] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const quickActions: QuickAction[] = [
     {
       id: 'explain',
-      icon: <Brain className="h-4 w-4" />,
-      label: 'Explain Concept',
-      prompt: 'Can you explain this concept in simple terms?',
-      color: 'bg-blue-500 hover:bg-blue-600'
+      icon: <Brain className="h-5 w-5" />,
+      label: 'Explain a concept',
+      prompt: 'Can you explain this concept in detail with examples?',
+      color: 'border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700'
     },
     {
       id: 'summarize',
-      icon: <BookOpen className="h-4 w-4" />,
-      label: 'Summarize',
-      prompt: 'Can you summarize the key points from this section?',
-      color: 'bg-emerald-500 hover:bg-emerald-600'
+      icon: <BookOpen className="h-5 w-5" />,
+      label: 'Summarize topic',
+      prompt: 'Can you provide a comprehensive summary of this topic?',
+      color: 'border-green-200 bg-green-50 hover:bg-green-100 text-green-700'
     },
     {
       id: 'examples',
-      icon: <Lightbulb className="h-4 w-4" />,
-      label: 'Give Examples',
-      prompt: 'Can you provide some practical examples?',
-      color: 'bg-amber-500 hover:bg-amber-600'
+      icon: <Lightbulb className="h-5 w-5" />,
+      label: 'Give examples',
+      prompt: 'Can you provide practical examples and case studies?',
+      color: 'border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-700'
     },
     {
       id: 'quiz',
-      icon: <HelpCircle className="h-4 w-4" />,
-      label: 'Test Me',
-      prompt: 'Create a quick quiz to test my understanding',
-      color: 'bg-purple-500 hover:bg-purple-600'
+      icon: <HelpCircle className="h-5 w-5" />,
+      label: 'Test my knowledge',
+      prompt: 'Create a practice quiz to test my understanding of this topic',
+      color: 'border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700'
     }
   ]
 
@@ -83,7 +115,7 @@ export function AiTutorChat({ unitId, selectedText }: AiTutorChatProps) {
   useEffect(() => {
     if (selectedText) {
       setInputMessage(`Explain this: "${selectedText}"`)
-      inputRef.current?.focus()
+      textareaRef.current?.focus()
     }
   }, [selectedText])
 
@@ -127,7 +159,75 @@ export function AiTutorChat({ unitId, selectedText }: AiTutorChatProps) {
 
   const handleQuickAction = (action: QuickAction) => {
     setInputMessage(action.prompt)
-    inputRef.current?.focus()
+    textareaRef.current?.focus()
+  }
+
+  const createNewChat = () => {
+    const newChat: Chat = {
+      id: Date.now().toString(),
+      title: 'New Chat',
+      lastMessage: '',
+      timestamp: new Date(),
+      messageCount: 0
+    }
+    setChats(prev => [newChat, ...prev])
+    setActiveChat(newChat.id)
+    setMessages([
+      {
+        id: '1',
+        type: 'ai',
+        content: "Hello! I'm Maia, your AI tutor for CRMA exam preparation. I'm here to help you understand complex risk management concepts, practice exam questions, and develop effective study strategies. What would you like to explore today?",
+        timestamp: new Date()
+      }
+    ])
+  }
+
+  const selectChat = (chatId: string) => {
+    setActiveChat(chatId)
+    setMessages([
+      {
+        id: '1',
+        type: 'ai',
+        content: `Welcome back to your chat: "${chats.find(c => c.id === chatId)?.title}". What would you like to continue discussing?`,
+        timestamp: new Date()
+      }
+    ])
+  }
+
+  const deleteChat = (chatId: string) => {
+    if (chats.length === 1) return
+    setChats(prev => prev.filter(chat => chat.id !== chatId))
+    if (activeChat === chatId) {
+      const remainingChats = chats.filter(chat => chat.id !== chatId)
+      if (remainingChats.length > 0) {
+        setActiveChat(remainingChats[0].id)
+      }
+    }
+  }
+
+  const renameChat = (chatId: string, newTitle: string) => {
+    setChats(prev => prev.map(chat => 
+      chat.id === chatId ? { ...chat, title: newTitle } : chat
+    ))
+  }
+
+  const formatTimestamp = (timestamp: Date) => {
+    const now = new Date()
+    const diffHours = (now.getTime() - timestamp.getTime()) / (1000 * 60 * 60)
+    if (diffHours < 24) {
+      return `${Math.floor(diffHours)}h ago`
+    } else {
+      const diffDays = diffHours / 24
+      return `${Math.floor(diffDays)}d ago`
+    }
+  }
+
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current
+    if (textarea) {
+      textarea.style.height = 'auto'
+      textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px'
+    }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -137,193 +237,308 @@ export function AiTutorChat({ unitId, selectedText }: AiTutorChatProps) {
     }
   }
 
+  const getCurrentChat = () => chats.find(chat => chat.id === activeChat)
+
   const copyMessage = (content: string) => {
     navigator.clipboard.writeText(content)
     // You could add a toast notification here
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-white to-slate-50 rounded-2xl shadow-xl border border-slate-200/50 overflow-hidden">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-4 text-white">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-            <Bot className="h-6 w-6" />
-          </div>
-          <div>
-            <h3 className="font-bold text-lg">Maia AI Tutor</h3>
-            <p className="text-sm text-white/80 flex items-center gap-1">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              Online & Ready to Help
-            </p>
-          </div>
-          <div className="ml-auto">
-            <Sparkles className="h-5 w-5 text-white/80" />
+    <div className="h-[calc(100vh-8rem)] flex bg-gradient-to-br from-slate-50/50 via-white to-blue-50/30 overflow-hidden">
+      {/* Left Sidebar - Chat History */}
+      <div className="w-80 bg-white/80 backdrop-blur-sm border-r border-slate-200/50 flex flex-col shadow-lg">
+        {/* Chat History Header */}
+        <div className="p-4 border-b border-slate-200/50">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                <MessageSquare className="h-4 w-4 text-white" />
+              </div>
+              <h2 className="text-lg font-semibold text-slate-800">Chat History</h2>
+            </div>
+            <button
+              onClick={createNewChat}
+              className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+            >
+              <Plus className="h-4 w-4" />
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Quick Actions */}
-      <div className="p-4 border-b border-slate-100">
-        <div className="grid grid-cols-2 gap-2">
-          {quickActions.map((action) => (
-            <Button
-              key={action.id}
-              variant="ghost"
-              size="sm"
-              onClick={() => handleQuickAction(action)}
-              className={`${action.color} text-white text-xs h-8 justify-start gap-2 hover:scale-105 transition-all duration-200`}
-            >
-              {action.icon}
-              {action.label}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      {/* Messages */}
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              {message.type === 'ai' && (
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Bot className="h-4 w-4 text-white" />
-                </div>
-              )}
-              
-              <div className={`group max-w-[80%] ${message.type === 'user' ? 'order-first' : ''}`}>
+        {/* Chat List */}
+        <div className="flex-1 overflow-hidden">
+          <ScrollArea className="h-full p-4">
+            <div className="space-y-3">
+              {chats.map((chat) => (
                 <div
-                  className={`p-3 rounded-2xl shadow-sm ${
-                    message.type === 'user'
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white ml-auto'
-                      : 'bg-white border border-slate-200'
+                  key={chat.id}
+                  className={`group relative p-3 rounded-xl border cursor-pointer transition-all duration-200 hover:shadow-sm ${
+                    activeChat === chat.id
+                      ? "bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200"
+                      : "bg-white/50 border-slate-200 hover:bg-white/80"
                   }`}
                 >
-                  <p className={`text-sm leading-relaxed ${message.type === 'ai' ? 'text-slate-800' : 'text-white'}`}>
-                    {message.content}
-                  </p>
+                  <div onClick={() => selectChat(chat.id)} className="flex-1">
+                    <div className="flex items-start justify-between mb-1">
+                      <h4 className="font-medium text-slate-800 truncate text-sm pr-2">
+                        {chat.title}
+                      </h4>
+                      <div className="flex items-center gap-1 text-xs text-slate-400 flex-shrink-0">
+                        <Clock className="h-3 w-3" />
+                        {formatTimestamp(chat.timestamp)}
+                      </div>
+                    </div>
+                    
+                    <p className="text-xs text-slate-500 truncate mb-2">
+                      {chat.lastMessage || "No messages yet"}
+                    </p>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1 text-xs text-slate-400">
+                        <MessageSquare className="h-3 w-3" />
+                        {chat.messageCount} messages
+                      </div>
+                      
+                      {/* Action buttons */}
+                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            const newTitle = prompt("Rename chat:", chat.title)
+                            if (newTitle) renameChat(chat.id, newTitle)
+                          }}
+                          className="p-1 hover:bg-slate-200 rounded text-slate-500 hover:text-slate-700"
+                        >
+                          <Edit3 className="h-3 w-3" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            if (confirm("Delete this chat?")) deleteChat(chat.id)
+                          }}
+                          className="p-1 hover:bg-red-100 rounded text-slate-500 hover:text-red-600"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                
-                <div className="flex items-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-xs text-slate-500">
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                  
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
+      </div>
+
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col min-w-0 bg-white/50 backdrop-blur-sm">
+        {/* Welcome Section */}
+        {messages.length <= 1 && (
+          <div className="flex-1 flex flex-col justify-center items-center p-8 text-center">
+            <div className="mb-8">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg">
+                <Brain className="h-8 w-8 text-white" />
+              </div>
+              <h1 className="text-3xl font-bold text-slate-800 mb-2">How can I help you today?</h1>
+              <p className="text-slate-600 max-w-2xl">
+                Hello! I'm Maia, your AI tutor for CRMA exam preparation. I'm here to help you understand complex 
+                risk management concepts, practice exam questions, and develop effective study strategies.
+              </p>
+            </div>
+
+            <div className="w-full max-w-4xl">
+              {/* AI Message */}
+              <div className="flex justify-start mb-6">
+                <div className="flex gap-4 max-w-2xl">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Bot className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="bg-white/80 backdrop-blur-sm border border-slate-200 p-4 rounded-2xl shadow-sm">
+                    <p className="text-slate-800 leading-relaxed">
+                      {messages[0]?.content}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Messages for active conversations */}
+        {messages.length > 1 && (
+          <ScrollArea className="flex-1 p-6">
+            <div className="max-w-4xl mx-auto space-y-6">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex gap-4 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
                   {message.type === 'ai' && (
-                    <div className="flex items-center gap-1 ml-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => copyMessage(message.content)}
-                        className="h-6 w-6 p-0 hover:bg-slate-100"
-                      >
-                        <Copy className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-6 w-6 p-0 hover:bg-slate-100 text-green-600"
-                      >
-                        <ThumbsUp className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-6 w-6 p-0 hover:bg-slate-100 text-red-600"
-                      >
-                        <ThumbsDown className="h-3 w-3" />
-                      </Button>
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Bot className="h-5 w-5 text-white" />
+                    </div>
+                  )}
+                  
+                  <div className={`group max-w-3xl ${message.type === 'user' ? 'order-first' : ''}`}>
+                    <div
+                      className={`p-4 rounded-2xl shadow-sm border ${
+                        message.type === 'user'
+                          ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white ml-auto'
+                          : 'bg-white/80 backdrop-blur-sm border-slate-200 text-slate-800'
+                      }`}
+                    >
+                      <p className="leading-relaxed whitespace-pre-wrap">
+                        {message.content}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-xs text-slate-500">
+                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                      
+                      {message.type === 'ai' && (
+                        <div className="flex items-center gap-1 ml-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => copyMessage(message.content)}
+                            className="h-7 w-7 p-0 hover:bg-slate-200"
+                          >
+                            <Copy className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 w-7 p-0 hover:bg-slate-200 text-green-600"
+                          >
+                            <ThumbsUp className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 w-7 p-0 hover:bg-slate-200 text-red-600"
+                          >
+                            <ThumbsDown className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {message.type === 'user' && (
+                    <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                      <User className="h-5 w-5 text-white" />
                     </div>
                   )}
                 </div>
-              </div>
+              ))}
               
-              {message.type === 'user' && (
-                <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <User className="h-4 w-4 text-white" />
+              {isTyping && (
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                    <Bot className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="bg-white/80 backdrop-blur-sm border border-slate-200 p-4 rounded-2xl shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse"></div>
+                        <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                      </div>
+                      <span className="text-sm text-slate-500">Maia is thinking...</span>
+                    </div>
+                  </div>
                 </div>
               )}
+              <div ref={messagesEndRef} />
             </div>
-          ))}
-          
-          {isTyping && (
-            <div className="flex gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                <Bot className="h-4 w-4 text-white" />
+          </ScrollArea>
+        )}
+
+        {/* Input Area */}
+        <div className="border-t border-slate-200/50 p-4 bg-white/50 backdrop-blur-sm">
+          <div className="max-w-4xl mx-auto">
+            <div className="relative">
+              <div className="flex items-end gap-3 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl p-3 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all shadow-sm">
+                <Textarea
+                  ref={textareaRef}
+                  value={inputMessage}
+                  onChange={(e) => {
+                    setInputMessage(e.target.value)
+                    adjustTextareaHeight()
+                  }}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Ask Maia anything about CRMA preparation..."
+                  className="flex-1 min-h-[24px] max-h-[120px] border-none bg-transparent resize-none focus:ring-0 focus:outline-none"
+                  disabled={isTyping}
+                  rows={1}
+                />
+                
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 hover:bg-slate-200"
+                  >
+                    <Paperclip className="h-4 w-4 text-slate-500" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 hover:bg-slate-200"
+                  >
+                    <Mic className="h-4 w-4 text-slate-500" />
+                  </Button>
+                  
+                  <Button
+                    onClick={handleSendMessage}
+                    disabled={!inputMessage.trim() || isTyping}
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl px-4 h-10 shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50"
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-              <div className="bg-white border border-slate-200 p-3 rounded-2xl shadow-sm">
-                <div className="flex items-center gap-1">
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse"></div>
-                    <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-                  </div>
-                  <span className="text-xs text-slate-500 ml-2">Maia is thinking...</span>
+              
+              <div className="flex items-center justify-between mt-2 text-xs text-slate-500">
+                <span>Press Enter to send, Shift+Enter for new line</span>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setMessages(messages.slice(0, 1))}
+                    className="h-6 text-xs hover:bg-slate-100"
+                  >
+                    <RotateCcw className="h-3 w-3 mr-1" />
+                    Clear Chat
+                  </Button>
                 </div>
               </div>
             </div>
-          )}
-          <div ref={messagesEndRef} />
+          </div>
         </div>
-      </ScrollArea>
+      </div>
 
-      {/* Input Area */}
-      <div className="p-4 border-t border-slate-100 bg-white">
-        <div className="flex items-center gap-2">
-          <div className="flex-1 relative">
-            <Input
-              ref={inputRef}
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Ask Maia anything about this topic..."
-              className="pr-24 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-300 rounded-xl"
-              disabled={isTyping}
-            />
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 w-7 p-0 hover:bg-slate-200"
-              >
-                <Paperclip className="h-4 w-4 text-slate-500" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 w-7 p-0 hover:bg-slate-200"
-              >
-                <Mic className="h-4 w-4 text-slate-500" />
-              </Button>
-            </div>
-          </div>
-          
-          <Button
-            onClick={handleSendMessage}
-            disabled={!inputMessage.trim() || isTyping}
-            className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-xl px-4 h-10 shadow-md hover:shadow-lg transition-all duration-200"
-          >
-            <Send className="h-4 w-4" />
-          </Button>
-        </div>
-        
-        <div className="flex items-center justify-between mt-2 text-xs text-slate-500">
-          <span>Press Enter to send, Shift+Enter for new line</span>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setMessages(messages.slice(0, 1))}
-              className="h-6 text-xs hover:bg-slate-100"
+      {/* Right Sidebar - Quick Actions */}
+      <div className="w-80 bg-white/80 backdrop-blur-sm border-l border-slate-200/50 p-4 shadow-lg">
+        <div className="space-y-4">
+          {quickActions.map((action) => (
+            <button
+              key={action.id}
+              onClick={() => handleQuickAction(action)}
+              className={`w-full p-4 rounded-2xl border-2 transition-all duration-200 hover:scale-[1.02] text-left ${action.color}`}
             >
-              <RotateCcw className="h-3 w-3 mr-1" />
-              Clear Chat
-            </Button>
-          </div>
+              <div className="flex items-center gap-3 mb-3">
+                {action.icon}
+                <span className="font-semibold">{action.label}</span>
+              </div>
+              <p className="text-sm opacity-75 leading-relaxed">
+                {action.prompt}
+              </p>
+            </button>
+          ))}
         </div>
       </div>
     </div>
