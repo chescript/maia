@@ -135,61 +135,36 @@ export function ChatInterface({
 
   return (
     <div className="flex flex-col h-full bg-transparent overflow-hidden">
-      {/* Chat Header */}
-      <div className="border-b border-slate-200/50 p-4 bg-gradient-to-r from-blue-50/50 to-purple-50/50 backdrop-blur-sm flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-            <Bot className="h-7 w-7 text-white" />
-          </div>
-          <div className="flex-1">
-            <h1 className="font-bold text-slate-900 text-xl">
-              {chatTitle}
-            </h1>
-            <div className="flex items-center gap-2 text-sm text-slate-600">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              Maia AI Tutor - Ready to help
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="bg-white/50 rounded-lg px-3 py-1 text-sm text-slate-600 font-medium">
-              {messages.length} messages
-            </div>
-            <Sparkles className="h-6 w-6 text-purple-500" />
-          </div>
-        </div>
-      </div>
+
 
       {/* Messages Area */}
       <ScrollArea className="flex-1 p-4 bg-gradient-to-b from-transparent to-slate-50/30">
         <div className="max-w-5xl mx-auto space-y-6">
           {/* Quick Prompts - Show only if no messages yet or just welcome message */}
           {messages.length <= 1 && (
-            <div className="mb-8">
-              <div className="text-center mb-6">
-                <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center justify-center gap-3">
-                  <Brain className="h-8 w-8 text-blue-500" />
+            <div className="mb-4">
+              <div className="text-center mb-3">
+                <h2 className="text-lg font-bold text-slate-800 mb-1 flex items-center justify-center gap-2">
+                  <Brain className="h-5 w-5 text-blue-500" />
                   How can I help you today?
                 </h2>
-                <p className="text-slate-600 max-w-2xl mx-auto">
-                  Choose a quick prompt below or ask me anything about CRMA exam preparation, risk management concepts, or study strategies.
+                <p className="text-sm text-slate-600 max-w-2xl mx-auto">
+                  Choose a quick prompt below or ask me anything about CRMA exam preparation.
                 </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {quickPrompts.map((prompt) => (
                   <button
                     key={prompt.id}
                     onClick={() => handleQuickPrompt(prompt)}
-                    className={`p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg text-left bg-white/50 backdrop-blur-sm ${prompt.color}`}
+                    className={`p-2 rounded-lg border transition-all duration-300 hover:scale-[1.02] hover:shadow-md text-left bg-white/50 backdrop-blur-sm ${prompt.color}`}
                   >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 rounded-lg bg-white/80">
+                    <div className="flex items-center gap-1 mb-1">
+                      <div className="p-1 rounded bg-white/80">
                         {prompt.icon}
                       </div>
-                      <span className="font-bold text-lg">{prompt.label}</span>
+                      <span className="font-medium text-xs">{prompt.label}</span>
                     </div>
-                    <p className="text-sm opacity-80 leading-relaxed">
-                      {prompt.prompt}
-                    </p>
                   </button>
                 ))}
               </div>

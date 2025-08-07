@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Send, Sparkles, Bot, User, Copy, ThumbsUp, ThumbsDown, RotateCcw, BookOpen, Brain, Lightbulb, HelpCircle, Mic, Image, Paperclip, Plus, Clock, MessageSquare, Edit3, Trash2 } from 'lucide-react'
+import { Send, Sparkles, Bot, User, Copy, ThumbsUp, ThumbsDown, RotateCcw, BookOpen, Brain, Lightbulb, HelpCircle, Mic, Image, Paperclip, Plus, Clock, MessageSquare, Edit3, Trash2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -60,6 +60,7 @@ export function AiTutorChat({ unitId, selectedText }: AiTutorChatProps) {
     }
   ])
   const [activeChat, setActiveChat] = useState<string>('1')
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -247,87 +248,138 @@ export function AiTutorChat({ unitId, selectedText }: AiTutorChatProps) {
   return (
     <div className="h-[calc(100vh-8rem)] flex bg-gradient-to-br from-slate-50/50 via-white to-blue-50/30 overflow-hidden">
       {/* Left Sidebar - Chat History */}
-      <div className="w-80 bg-white/80 backdrop-blur-sm border-r border-slate-200/50 flex flex-col shadow-lg">
+      <div className={`${sidebarCollapsed ? 'w-16' : 'w-80'} bg-white/80 backdrop-blur-sm border-r border-slate-200/50 flex flex-col shadow-lg transition-all duration-300`}>
         {/* Chat History Header */}
         <div className="p-4 border-b border-slate-200/50">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                <MessageSquare className="h-4 w-4 text-white" />
+          <div className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between'} mb-4`}>
+            {!sidebarCollapsed && (
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                  <MessageSquare className="h-4 w-4 text-white" />
+                </div>
+                <h2 className="text-lg font-semibold text-slate-800">Chat History</h2>
               </div>
-              <h2 className="text-lg font-semibold text-slate-800">Chat History</h2>
+            )}
+            
+            <div className="flex items-center gap-2">
+              {!sidebarCollapsed && (
+                <button
+                  onClick={createNewChat}
+                  className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              )}
+              
+              <button
+                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                className="p-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition-all duration-200"
+                title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              >
+                {sidebarCollapsed ? (
+                  <ChevronRight className="h-4 w-4 text-slate-600" />
+                ) : (
+                  <ChevronLeft className="h-4 w-4 text-slate-600" />
+                )}
+              </button>
             </div>
-            <button
-              onClick={createNewChat}
-              className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              <Plus className="h-4 w-4" />
-            </button>
           </div>
         </div>
 
         {/* Chat List */}
         <div className="flex-1 overflow-hidden">
-          <ScrollArea className="h-full p-4">
-            <div className="space-y-3">
-              {chats.map((chat) => (
-                <div
-                  key={chat.id}
-                  className={`group relative p-3 rounded-xl border cursor-pointer transition-all duration-200 hover:shadow-sm ${
-                    activeChat === chat.id
-                      ? "bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200"
-                      : "bg-white/50 border-slate-200 hover:bg-white/80"
-                  }`}
-                >
-                  <div onClick={() => selectChat(chat.id)} className="flex-1">
-                    <div className="flex items-start justify-between mb-1">
-                      <h4 className="font-medium text-slate-800 truncate text-sm pr-2">
-                        {chat.title}
-                      </h4>
-                      <div className="flex items-center gap-1 text-xs text-slate-400 flex-shrink-0">
-                        <Clock className="h-3 w-3" />
-                        {formatTimestamp(chat.timestamp)}
-                      </div>
-                    </div>
-                    
-                    <p className="text-xs text-slate-500 truncate mb-2">
-                      {chat.lastMessage || "No messages yet"}
-                    </p>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-xs text-slate-400">
-                        <MessageSquare className="h-3 w-3" />
-                        {chat.messageCount} messages
+          {!sidebarCollapsed ? (
+            <ScrollArea className="h-full p-4">
+              <div className="space-y-3">
+                {chats.map((chat) => (
+                  <div
+                    key={chat.id}
+                    className={`group relative p-3 rounded-xl border cursor-pointer transition-all duration-200 hover:shadow-sm ${
+                      activeChat === chat.id
+                        ? "bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200"
+                        : "bg-white/50 border-slate-200 hover:bg-white/80"
+                    }`}
+                  >
+                    <div onClick={() => selectChat(chat.id)} className="flex-1">
+                      <div className="flex items-start justify-between mb-1">
+                        <h4 className="font-medium text-slate-800 truncate text-sm pr-2">
+                          {chat.title}
+                        </h4>
+                        <div className="flex items-center gap-1 text-xs text-slate-400 flex-shrink-0">
+                          <Clock className="h-3 w-3" />
+                          {formatTimestamp(chat.timestamp)}
+                        </div>
                       </div>
                       
-                      {/* Action buttons */}
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            const newTitle = prompt("Rename chat:", chat.title)
-                            if (newTitle) renameChat(chat.id, newTitle)
-                          }}
-                          className="p-1 hover:bg-slate-200 rounded text-slate-500 hover:text-slate-700"
-                        >
-                          <Edit3 className="h-3 w-3" />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            if (confirm("Delete this chat?")) deleteChat(chat.id)
-                          }}
-                          className="p-1 hover:bg-red-100 rounded text-slate-500 hover:text-red-600"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </button>
+                      <p className="text-xs text-slate-500 truncate mb-2">
+                        {chat.lastMessage || "No messages yet"}
+                      </p>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1 text-xs text-slate-400">
+                          <MessageSquare className="h-3 w-3" />
+                          {chat.messageCount} messages
+                        </div>
+                        
+                        {/* Action buttons */}
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              const newTitle = prompt("Rename chat:", chat.title)
+                              if (newTitle) renameChat(chat.id, newTitle)
+                            }}
+                            className="p-1 hover:bg-slate-200 rounded text-slate-500 hover:text-slate-700"
+                          >
+                            <Edit3 className="h-3 w-3" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (confirm("Delete this chat?")) deleteChat(chat.id)
+                            }}
+                            className="p-1 hover:bg-red-100 rounded text-slate-500 hover:text-red-600"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                ))}
+              </div>
+            </ScrollArea>
+          ) : (
+            /* Collapsed sidebar - show only icons */
+            <div className="p-2 space-y-2">
+              {sidebarCollapsed && (
+                <button
+                  onClick={createNewChat}
+                  className="w-full p-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+                  title="New Chat"
+                >
+                  <Plus className="h-4 w-4 mx-auto" />
+                </button>
+              )}
+              
+              {chats.slice(0, 8).map((chat) => (
+                <button
+                  key={chat.id}
+                  onClick={() => selectChat(chat.id)}
+                  className={`w-full p-3 rounded-lg transition-all duration-200 ${
+                    activeChat === chat.id
+                      ? "bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200"
+                      : "bg-white/50 hover:bg-white/80"
+                  }`}
+                  title={chat.title}
+                >
+                  <MessageSquare className={`h-4 w-4 mx-auto ${
+                    activeChat === chat.id ? 'text-blue-600' : 'text-slate-500'
+                  }`} />
+                </button>
               ))}
             </div>
-          </ScrollArea>
+          )}
         </div>
       </div>
 

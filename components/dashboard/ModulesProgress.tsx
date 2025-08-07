@@ -92,25 +92,34 @@ export function ModulesProgress() {
 
   const getActionButton = (module: Module) => {
     const href = `/dashboard/unit/${module.id}`;
-    
+
     switch (module.status) {
       case "completed":
         return (
-          <a href={href} className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-lg hover:from-emerald-600 hover:to-green-600 transition-all duration-200 shadow-sm">
+          <a
+            href={href}
+            className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-lg hover:from-emerald-600 hover:to-green-600 transition-all duration-200 shadow-sm"
+          >
             <RotateCcw className="h-4 w-4" />
             <span>Review</span>
           </a>
         );
       case "in-progress":
         return (
-          <a href={href} className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 shadow-sm">
+          <a
+            href={href}
+            className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 shadow-sm"
+          >
             <Play className="h-4 w-4" />
             <span>Continue</span>
           </a>
         );
       case "not-started":
         return (
-          <a href={href} className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-violet-500 text-white rounded-lg hover:from-purple-600 hover:to-violet-600 transition-all duration-200 shadow-sm">
+          <a
+            href={href}
+            className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-violet-500 text-white rounded-lg hover:from-purple-600 hover:to-violet-600 transition-all duration-200 shadow-sm"
+          >
             <Play className="h-4 w-4" />
             <span>Start</span>
           </a>
