@@ -41,15 +41,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = createClient()
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setUser(session?.user ?? null)
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
       
-      if (session?.user) {
+      if (user) {
         const { data: profileData } = await supabase
           .from('user_profiles')
           .select('*')
-          .eq('id', session.user.id)
+          .eq('id', user.id)
           .single()
         
         setProfile(profileData)
@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false)
     }
 
-    getSession()
+    getUser()
 
     const {
       data: { subscription },
