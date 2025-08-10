@@ -354,13 +354,17 @@ export default function ContentPage() {
           {filteredUnits.map((unit) => (
             <div
               key={unit.id}
-              className={`flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl hover:shadow-sm transition-all duration-200 ${
+              className={`flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-white border border-slate-200 rounded-xl hover:shadow-sm transition-all duration-200 gap-3 sm:gap-4 ${
                 unit.isLocked ? "opacity-60" : ""
               }`}
             >
               {/* Left Section - Icon and Title */}
-              <div className="flex items-center space-x-4">
-                <div className={`w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center ${unit.isLocked ? 'opacity-50' : ''}`}>
+              <div className="flex items-start sm:items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
+                <div
+                  className={`w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                    unit.isLocked ? "opacity-50" : ""
+                  }`}
+                >
                   {unit.progress === 100 ? (
                     <CheckCircle className="h-4 w-4 text-white" />
                   ) : unit.progress > 0 ? (
@@ -369,36 +373,46 @@ export default function ContentPage() {
                     <BookOpen className="h-4 w-4 text-white" />
                   )}
                 </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-slate-800 text-sm">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                    <h3 className="font-semibold text-slate-800 text-sm sm:text-base truncate">
                       {unit.title}
                     </h3>
-                    {unit.isLocked && <Badge variant="secondary" className="text-xs">Locked</Badge>}
+                    {unit.isLocked && (
+                      <Badge variant="secondary" className="text-xs self-start sm:self-center">
+                        Locked
+                      </Badge>
+                    )}
                   </div>
-                  <div className="flex items-center space-x-4 mt-1">
-                    <div className="flex items-center space-x-1 text-xs text-slate-500">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
+                    <div className="flex items-center space-x-2 text-xs text-slate-500">
                       <span>Progress</span>
+                      <span className="text-slate-600 font-medium">
+                        {unit.progress}%
+                      </span>
                     </div>
-                    <div className="w-32 bg-slate-200 rounded-full h-2">
+                    <div className="flex-1 max-w-xs bg-slate-200 rounded-full h-2">
                       <div
                         className="bg-blue-500 rounded-full h-2 transition-all duration-500"
                         style={{ width: `${unit.progress}%` }}
                       />
                     </div>
-                    <span className="text-xs text-slate-600">
-                      {unit.progress}%
-                    </span>
                   </div>
-                  <div className="flex items-center space-x-4 mt-2 text-xs text-slate-500">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 text-xs text-slate-500">
                     <span className="flex items-center space-x-1">
-                      <span className={`px-2 py-1 rounded-full text-xs ${getDifficultyColor(unit.difficulty)}`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs ${getDifficultyColor(
+                          unit.difficulty
+                        )}`}
+                      >
                         {unit.difficulty}
                       </span>
                     </span>
                     <span className="flex items-center space-x-1">
                       <FileText className="h-3 w-3" />
-                      <span>{unit.completedLessons}/{unit.totalLessons} lessons</span>
+                      <span>
+                        {unit.completedLessons}/{unit.totalLessons} lessons
+                      </span>
                     </span>
                     <span className="flex items-center space-x-1">
                       <Clock className="h-3 w-3" />
@@ -407,11 +421,11 @@ export default function ContentPage() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Right Section - Action Button */}
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center justify-end sm:justify-start flex-shrink-0">
                 <Button
-                  className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 shadow-sm"
+                  className="flex items-center justify-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 shadow-sm text-sm font-medium min-w-0 whitespace-nowrap"
                   disabled={unit.isLocked}
                   onClick={() =>
                     (window.location.href = `/dashboard/unit/${unit.id}`)
@@ -421,18 +435,18 @@ export default function ContentPage() {
                     "Locked"
                   ) : unit.progress === 0 ? (
                     <>
-                      <Play className="h-4 w-4" />
-                      <span>Start</span>
+                      <Play className="h-4 w-4 flex-shrink-0" />
+                      <span className="hidden sm:inline">Start</span>
                     </>
                   ) : unit.progress === 100 ? (
                     <>
-                      <RotateCcw className="h-4 w-4" />
-                      <span>Review</span>
+                      <RotateCcw className="h-4 w-4 flex-shrink-0" />
+                      <span className="hidden sm:inline">Review</span>
                     </>
                   ) : (
                     <>
-                      <Play className="h-4 w-4" />
-                      <span>Continue</span>
+                      <Play className="h-4 w-4 flex-shrink-0" />
+                      <span className="hidden sm:inline">Continue</span>
                     </>
                   )}
                 </Button>

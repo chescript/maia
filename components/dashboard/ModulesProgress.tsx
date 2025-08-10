@@ -74,36 +74,37 @@ export function ModulesProgress() {
 
   const getActionButton = (module: Module) => {
     const href = `/dashboard/unit/${module.id}`;
+    const baseClasses = "flex items-center justify-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 text-white rounded-lg transition-all duration-200 shadow-sm text-sm font-medium min-w-0 whitespace-nowrap";
 
     switch (module.status) {
       case "completed":
         return (
           <a
             href={href}
-            className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-lg hover:from-emerald-600 hover:to-green-600 transition-all duration-200 shadow-sm"
+            className={`${baseClasses} bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600`}
           >
-            <RotateCcw className="h-4 w-4" />
-            <span>Review</span>
+            <RotateCcw className="h-4 w-4 flex-shrink-0" />
+            <span className="hidden sm:inline">Review</span>
           </a>
         );
       case "in-progress":
         return (
           <a
             href={href}
-            className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 shadow-sm"
+            className={`${baseClasses} bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600`}
           >
-            <Play className="h-4 w-4" />
-            <span>Continue</span>
+            <Play className="h-4 w-4 flex-shrink-0" />
+            <span className="hidden sm:inline">Continue</span>
           </a>
         );
       case "not-started":
         return (
           <a
             href={href}
-            className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-violet-500 text-white rounded-lg hover:from-purple-600 hover:to-violet-600 transition-all duration-200 shadow-sm"
+            className={`${baseClasses} bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600`}
           >
-            <Play className="h-4 w-4" />
-            <span>Start</span>
+            <Play className="h-4 w-4 flex-shrink-0" />
+            <span className="hidden sm:inline">Start</span>
           </a>
         );
     }
@@ -126,45 +127,46 @@ export function ModulesProgress() {
         {modules.map((module, index) => (
           <div
             key={module.id}
-            className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl hover:shadow-sm transition-all duration-200"
+            className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-white border border-slate-200 rounded-xl hover:shadow-sm transition-all duration-200 gap-3 sm:gap-4"
           >
             {/* Left Section - Icon and Title */}
-            <div className="flex items-center space-x-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center">
+            <div className="flex items-start sm:items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
                 {getStatusIcon(module.status)}
               </div>
-              <div>
-                <h3 className="font-semibold text-slate-800 text-sm">
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-slate-800 text-sm sm:text-base truncate">
                   {module.title}
                 </h3>
-                <div className="flex items-center space-x-4 mt-1">
-                  <div className="flex items-center space-x-1 text-xs text-slate-500">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
+                  <div className="flex items-center space-x-2 text-xs text-slate-500">
                     <span>Progress</span>
+                    <span className="text-slate-600 font-medium">
+                      {module.progress}%
+                    </span>
                   </div>
-                  <div className="w-32 bg-slate-200 rounded-full h-2">
+                  <div className="flex-1 max-w-xs bg-slate-200 rounded-full h-2">
                     <div
                       className="bg-blue-500 rounded-full h-2 transition-all duration-500"
                       style={{ width: `${module.progress}%` }}
                     />
                   </div>
-                  <span className="text-xs text-slate-600">
-                    {module.progress}%
-                  </span>
                 </div>
-                <div className="flex items-center space-x-4 mt-2 text-xs text-slate-500">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 text-xs text-slate-500">
                   <span className="flex items-center space-x-1">
-                    <span>Intermediate</span>
+                    <BarChart3 className="h-3 w-3" />
+                    <span>{module.difficulty}</span>
                   </span>
                   <span className="flex items-center space-x-1">
                     <Clock className="h-3 w-3" />
-                    <span>30 lessons</span>
+                    <span>{module.estimatedHours}h</span>
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Right Section - Action Button */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-end sm:justify-start flex-shrink-0">
               {getActionButton(module)}
             </div>
           </div>
