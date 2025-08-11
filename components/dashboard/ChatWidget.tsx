@@ -1,26 +1,47 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MessageCircle, X, Send, Bot, Sparkles } from "lucide-react";
+import {
+  MessageCircle,
+  X,
+  Send,
+  Bot,
+  Sparkles,
+  BarChart3,
+  TrendingUp,
+  Clock,
+  HelpCircle,
+} from "lucide-react";
+
+interface Message {
+  id: string;
+  type: "user" | "ai";
+  content: string;
+  timestamp: Date;
+}
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [isDesktop, setIsDesktop] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      id: "1",
-      type: "ai",
-      content:
-        "Hi, I'm Maia, your study buddy! How can I make your life easier today?",
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [quickSuggestions] = useState([
-    "Tell me about my CRMA readiness score",
-    "Where do I need to improve?",
-    "Where should I focus my time today?",
-    "Generate a custom quiz based on my weak areas",
+    {
+      text: "Tell me about my CRMA readiness score",
+      icon: <BarChart3 className="h-3 w-3" />,
+    },
+    {
+      text: "Where do I need to improve?",
+      icon: <TrendingUp className="h-3 w-3" />,
+    },
+    {
+      text: "Where should I focus my time today?",
+      icon: <Clock className="h-3 w-3" />,
+    },
+    {
+      text: "Generate a custom quiz based on my weak areas",
+      icon: <HelpCircle className="h-3 w-3" />,
+    },
   ]);
 
   // Detect screen size
@@ -63,9 +84,9 @@ export function ChatWidget() {
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-            >
-              <X className="h-4 w-4 text-slate-500" />
-            </button>
+          >
+            <X className="h-4 w-4 text-slate-500" />
+          </button>
         </div>
       )}
 
@@ -77,8 +98,12 @@ export function ChatWidget() {
               <Bot className="h-4 w-4 text-white" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-800 mb-1">Hi, Maia here, your study buddy!</p>
-              <p className="text-sm text-slate-600">How can I make your life easier today?</p>
+              <p className="text-sm font-medium text-slate-800 mb-1">
+                Hi, Maia here, your study buddy!
+              </p>
+              <p className="text-sm text-slate-600">
+                How can I make your life easier today?
+              </p>
             </div>
           </div>
         </div>
@@ -88,13 +113,13 @@ export function ChatWidget() {
           {quickSuggestions.map((suggestion, index) => (
             <button
               key={index}
-              onClick={() => setMessage(suggestion)}
+              onClick={() => setMessage(suggestion.text)}
               className="w-full text-left p-2 bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-lg text-xs text-slate-700 hover:text-slate-800 transition-all duration-200 border border-slate-200 hover:border-blue-300 hover:shadow-sm flex items-center gap-2"
             >
-              <div className="w-4 h-4 bg-gradient-to-br from-blue-100 to-purple-100 rounded flex items-center justify-center flex-shrink-0">
-                <div className="w-1.5 h-1.5 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full"></div>
+              <div className="w-4 h-4 bg-gradient-to-br from-blue-100 to-purple-100 rounded flex items-center justify-center flex-shrink-0 text-blue-600">
+                {suggestion.icon}
               </div>
-              {suggestion}
+              {suggestion.text}
             </button>
           ))}
         </div>

@@ -14,9 +14,6 @@ import {
   BookOpen,
   Lightbulb,
   HelpCircle,
-  Paperclip,
-  Mic,
-  Image,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -134,11 +131,9 @@ export function ChatInterface({
   };
 
   return (
-    <div className="flex flex-col h-full bg-transparent overflow-hidden">
-
-
+    <div className="flex flex-col h-full bg-transparent">
       {/* Messages Area */}
-      <ScrollArea className="flex-1 p-4 bg-gradient-to-b from-transparent to-slate-50/30">
+      <ScrollArea className="flex-1 min-h-0 p-4 bg-gradient-to-b from-transparent to-slate-50/30">
         <div className="max-w-5xl mx-auto space-y-6">
           {/* Quick Prompts - Show only if no messages yet or just welcome message */}
           {messages.length <= 1 && (
@@ -149,7 +144,8 @@ export function ChatInterface({
                   How can I help you today?
                 </h2>
                 <p className="text-sm text-slate-600 max-w-2xl mx-auto">
-                  Choose a quick prompt below or ask me anything about CRMA exam preparation.
+                  Choose a quick prompt below or ask me anything about CRMA exam
+                  preparation.
                 </p>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -163,7 +159,9 @@ export function ChatInterface({
                       <div className="p-1 rounded bg-white/80">
                         {prompt.icon}
                       </div>
-                      <span className="font-medium text-xs">{prompt.label}</span>
+                      <span className="font-medium text-xs">
+                        {prompt.label}
+                      </span>
                     </div>
                   </button>
                 ))}
@@ -298,30 +296,6 @@ export function ChatInterface({
               />
 
               <div className="flex items-center gap-2 flex-shrink-0">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 hover:bg-slate-200"
-                >
-                  <Paperclip className="h-4 w-4 text-slate-500" />
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 hover:bg-slate-200"
-                >
-                  <Image className="h-4 w-4 text-slate-500" />
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 hover:bg-slate-200"
-                >
-                  <Mic className="h-4 w-4 text-slate-500" />
-                </Button>
-
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim() || isTyping}

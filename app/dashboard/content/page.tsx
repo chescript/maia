@@ -12,15 +12,12 @@ import {
   Users,
   TrendingUp,
   Award,
-  Search,
-  Filter,
   ChevronRight,
   Star,
   BarChart3,
   RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -158,22 +155,8 @@ const categories = [
 const difficulties = ["All", "Beginner", "Intermediate", "Advanced"];
 
 export default function ContentPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("All");
-  const [showFilters, setShowFilters] = useState(false);
 
-  const filteredUnits = units.filter((unit) => {
-    const matchesSearch =
-      unit.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      unit.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "All" || unit.category === selectedCategory;
-    const matchesDifficulty =
-      selectedDifficulty === "All" || unit.difficulty === selectedDifficulty;
-
-    return matchesSearch && matchesCategory && matchesDifficulty;
-  });
+  const filteredUnits = units;
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -229,124 +212,7 @@ export default function ContentPage() {
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-green-600">
-                  {completedUnits}
-                </div>
-                <div className="text-sm text-gray-600">Completed Units</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Play className="h-5 w-5 text-blue-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-blue-600">
-                  {inProgressUnits}
-                </div>
-                <div className="text-sm text-gray-600">In Progress</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Award className="h-5 w-5 text-purple-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-purple-600">
-                  {totalUnits - completedUnits - inProgressUnits}
-                </div>
-                <div className="text-sm text-gray-600">Not Started</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Search and Filters */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search units by title or description..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2"
-            >
-              <Filter className="h-4 w-4" />
-              Filters
-            </Button>
-          </div>
-        </div>
-
-        {showFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Category
-                </label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Difficulty
-                </label>
-                <select
-                  value={selectedDifficulty}
-                  onChange={(e) => setSelectedDifficulty(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  {difficulties.map((difficulty) => (
-                    <option key={difficulty} value={difficulty}>
-                      {difficulty}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
 
       {/* Units List */}
       <div className="bg-white rounded-2xl border border-slate-200/50 p-6 shadow-sm">
@@ -379,7 +245,10 @@ export default function ContentPage() {
                       {unit.title}
                     </h3>
                     {unit.isLocked && (
-                      <Badge variant="secondary" className="text-xs self-start sm:self-center">
+                      <Badge
+                        variant="secondary"
+                        className="text-xs self-start sm:self-center"
+                      >
                         Locked
                       </Badge>
                     )}

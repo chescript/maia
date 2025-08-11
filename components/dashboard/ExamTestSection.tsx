@@ -132,46 +132,7 @@ export function ExamTestSection() {
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="mt-4 md:mt-6 grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4 p-4 md:p-5 bg-muted/30 rounded-lg">
-        <div className="text-center py-2">
-          <div className="text-lg md:text-xl font-bold text-card-foreground mb-1">24</div>
-          <div className="text-xs md:text-sm text-muted-foreground leading-tight">
-            Custom Tests Taken
-          </div>
-        </div>
-        <div className="text-center py-2">
-          <div className="text-lg md:text-xl font-bold text-card-foreground mb-1">78%</div>
-          <div className="text-xs md:text-sm text-muted-foreground leading-tight">
-            Average Score
-          </div>
-        </div>
-        <div className="text-center py-2">
-          <div className="text-lg md:text-xl font-bold text-card-foreground mb-1">2</div>
-          <div className="text-xs md:text-sm text-muted-foreground leading-tight">
-            Mock Exams Available
-          </div>
-        </div>
-        <div className="text-center py-2">
-          <div className="text-lg md:text-xl font-bold text-card-foreground mb-1">45</div>
-          <div className="text-xs md:text-sm text-muted-foreground leading-tight">
-            Days Until Exam
-          </div>
-        </div>
-      </div>
 
-      {/* Recommendations */}
-      <div className="mt-4 p-4 md:p-5 bg-primary/5 border border-primary/20 rounded-lg">
-        <h4 className="font-semibold text-card-foreground mb-3 flex items-center text-sm md:text-base">
-          <Target className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
-          AI Recommendations
-        </h4>
-        <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
-          Based on your progress, we recommend taking a custom test focusing on{" "}
-          <strong>Risk Response</strong> and{" "}
-          <strong>Information Systems</strong> before attempting Mock Exam 2.
-        </p>
-      </div>
     </div>
   );
 }

@@ -2,13 +2,23 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, User, Settings, LogOut, Clock, Bell, Search, Menu, Home, ChevronRight } from "lucide-react";
+import {
+  ChevronDown,
+  User,
+  Settings,
+  LogOut,
+  Clock,
+  Search,
+  Menu,
+  Home,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/components/auth/AuthProvider";
 
 interface LayoutHeaderProps {
-  variant?: 'dashboard' | 'unit';
+  variant?: "dashboard" | "unit";
   unitTitle?: string;
   showBreadcrumbs?: boolean;
   showSearch?: boolean;
@@ -16,13 +26,13 @@ interface LayoutHeaderProps {
   onMenuClick?: () => void;
 }
 
-export function LayoutHeader({ 
-  variant = 'dashboard', 
+export function LayoutHeader({
+  variant = "dashboard",
   unitTitle,
   showBreadcrumbs = false,
   showSearch = false,
   examDaysLeft = 45,
-  onMenuClick
+  onMenuClick,
 }: LayoutHeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -31,16 +41,22 @@ export function LayoutHeader({
 
   const handleSignOut = async () => {
     await signOut();
-    router.push('/');
+    router.push("/");
   };
 
   // Get display name and email
-  const displayName = profile?.full_name || user?.email?.split('@')[0] || 'User';
-  const userEmail = user?.email || 'user@example.com';
-  
+  const displayName =
+    profile?.full_name || user?.email?.split("@")[0] || "User";
+  const userEmail = user?.email || "user@example.com";
+
   // Get user initials for avatar
   const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
@@ -61,17 +77,19 @@ export function LayoutHeader({
                 <Menu className="h-5 w-5 text-slate-600" />
               </Button>
             )}
-            
+
             <div className="flex items-center space-x-2 sm:space-x-3">
               <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs sm:text-sm">M</span>
+                <span className="text-white font-bold text-xs sm:text-sm">
+                  M
+                </span>
               </div>
               <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Maia
               </h1>
             </div>
-            
-            {variant === 'dashboard' && (
+
+            {variant === "dashboard" && (
               <div className="hidden md:flex items-center space-x-1 text-sm text-slate-600">
                 <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
                   CRMA Prep
@@ -80,10 +98,14 @@ export function LayoutHeader({
             )}
           </div>
 
-          {/* Center Section - Search or Exam Countdown */}
+          {/* Center Section - Search only */}
           <div className="flex-1 max-w-xs sm:max-w-md mx-2 sm:mx-8">
-            {showSearch ? (
-              <div className={`relative transition-all duration-200 ${isSearchFocused ? 'scale-105' : ''}`}>
+            {showSearch && (
+              <div
+                className={`relative transition-all duration-200 ${
+                  isSearchFocused ? "scale-105" : ""
+                }`}
+              >
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-slate-400" />
                 <Input
                   placeholder="Search content, notes, or ask Maia..."
@@ -92,28 +114,11 @@ export function LayoutHeader({
                   onBlur={() => setIsSearchFocused(false)}
                 />
               </div>
-            ) : (
-              <div className="hidden sm:flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-100 to-red-100 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-orange-200">
-                <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-orange-600" />
-                <span className="text-xs sm:text-sm font-semibold text-orange-700">
-                  CRMA Exam in {examDaysLeft} days
-                </span>
-              </div>
             )}
           </div>
 
           {/* Right Section - Actions & User */}
           <div className="flex items-center space-x-1 sm:space-x-3">
-            {/* Notifications */}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="relative p-1.5 sm:p-2 hover:bg-blue-100 rounded-xl transition-colors"
-            >
-              <Bell className="h-4 w-4 sm:h-5 sm:w-5 text-slate-600" />
-              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-red-500 rounded-full border-2 border-white"></div>
-            </Button>
-
             {/* User Profile Dropdown */}
             <div className="relative">
               <button
@@ -122,8 +127,8 @@ export function LayoutHeader({
               >
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
                   {profile?.avatar_url ? (
-                    <img 
-                      src={profile.avatar_url} 
+                    <img
+                      src={profile.avatar_url}
                       alt={displayName}
                       className="w-full h-full rounded-full object-cover"
                     />
@@ -134,8 +139,12 @@ export function LayoutHeader({
                   )}
                 </div>
                 <div className="hidden md:block text-left">
-                  <div className="text-sm font-medium text-slate-700">{displayName}</div>
-                  <div className="text-xs text-slate-500">{profile?.role || 'Learner'}</div>
+                  <div className="text-sm font-medium text-slate-700">
+                    {displayName}
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    {profile?.role || "Learner"}
+                  </div>
                 </div>
                 <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4 text-slate-500" />
               </button>
@@ -144,14 +153,16 @@ export function LayoutHeader({
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl shadow-xl py-2 z-50">
                   <div className="px-4 py-2 border-b border-slate-100">
-                    <div className="font-medium text-slate-800">{displayName}</div>
+                    <div className="font-medium text-slate-800">
+                      {displayName}
+                    </div>
                     <div className="text-sm text-slate-500">{userEmail}</div>
                   </div>
                   <button className="w-full px-4 py-2 text-left text-sm hover:bg-blue-50 flex items-center space-x-3 transition-colors">
                     <Settings className="h-4 w-4 text-slate-500" />
                     <span className="text-slate-700">Settings</span>
                   </button>
-                  <button 
+                  <button
                     onClick={handleSignOut}
                     className="w-full px-4 py-2 text-left text-sm hover:bg-red-50 flex items-center space-x-3 text-red-600 transition-colors"
                   >
@@ -175,7 +186,9 @@ export function LayoutHeader({
             {unitTitle && (
               <>
                 <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 text-slate-400 flex-shrink-0" />
-                <span className="text-slate-800 font-medium truncate">{unitTitle}</span>
+                <span className="text-slate-800 font-medium truncate">
+                  {unitTitle}
+                </span>
               </>
             )}
           </div>

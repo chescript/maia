@@ -126,17 +126,18 @@ export function DetailedInsights() {
   };
 
   return (
-    <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-card-foreground flex items-center">
-          <BarChart3 className="h-6 w-6 mr-2 text-primary" />
-          Detailed Insights
+    <div className="bg-card rounded-xl border border-border p-4 sm:p-6 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-0">
+        <h2 className="text-xl sm:text-2xl font-bold text-card-foreground flex items-center">
+          <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6 mr-2 text-primary" />
+          <span className="hidden sm:inline">Detailed Insights</span>
+          <span className="sm:hidden">Insights</span>
         </h2>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center space-x-2 px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg transition-colors"
+          className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg transition-colors self-start sm:self-auto"
         >
-          <span className="text-sm font-medium">View Analytics</span>
+          <span className="text-xs sm:text-sm font-medium">View Analytics</span>
           {isExpanded ? (
             <ChevronUp className="h-4 w-4" />
           ) : (
@@ -147,7 +148,7 @@ export function DetailedInsights() {
 
       {!isExpanded ? (
         /* Summary View */
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* Performance Trend */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-card-foreground flex items-center">

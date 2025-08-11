@@ -204,7 +204,7 @@ export function AiTutorPage() {
   };
 
   return (
-    <div className="h-full flex flex-col lg:flex-row gap-4 p-4 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 min-h-[calc(100vh-4rem)]">
+    <div className="h-[calc(100vh-8.5rem)] sm:h-[calc(100vh-9rem)] md:h-[calc(100vh-10rem)] flex flex-col lg:flex-row gap-4 p-4 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 overflow-hidden">
       {/* Sidebar - Chat History */}
       <div className="lg:w-56 flex-shrink-0">
         <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 h-full flex flex-col">
@@ -311,8 +311,8 @@ export function AiTutorPage() {
       </div>
 
       {/* Main Chat Interface */}
-      <div className="flex-1 min-w-0">
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 h-full overflow-hidden">
+      <div className="flex-1 min-w-0 min-h-0">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 h-full flex flex-col overflow-hidden">
           <ChatInterface
             messages={messages}
             onSendMessage={sendMessage}

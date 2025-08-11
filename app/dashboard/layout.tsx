@@ -12,7 +12,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const pathname = usePathname();
 
   return (
@@ -20,7 +20,7 @@ export default function DashboardLayout({
       {/* Simple Header - always the same */}
       <LayoutHeader
         variant="dashboard"
-        showSearch={true}
+        showSearch={false}
         examDaysLeft={45}
         onMenuClick={() => setSidebarOpen(!sidebarOpen)}
       />
@@ -52,20 +52,24 @@ export default function DashboardLayout({
       <main
         className={`min-h-screen transition-all duration-300 pl-0 ${
           sidebarCollapsed ? "lg:pl-16" : "lg:pl-72"
-        } ${!pathname?.includes('/tutor') && !pathname?.includes('/content') ? 'lg:pr-80' : ''}`}
+        } ${
+          !pathname?.includes("/tutor")
+            ? "lg:pr-80 xl:pr-96 2xl:pr-[28rem]"
+            : ""
+        }`}
       >
         <div className="p-3 sm:p-4 md:p-6 space-y-4 md:space-y-6">
           {children}
         </div>
       </main>
 
-      {/* Fixed Chat Widget Sidebar - hidden on tutor and content pages */}
-      {!pathname?.includes('/tutor') && !pathname?.includes('/content') && (
+      {/* Fixed Chat Widget Sidebar - hidden on tutor page only */}
+      {!pathname?.includes("/tutor") && (
         <>
-          <div className="hidden lg:block fixed right-0 top-16 sm:top-20 bottom-0 w-80 z-20">
+          <div className="hidden lg:block fixed right-0 top-16 sm:top-20 bottom-0 w-80 xl:w-96 2xl:w-[28rem] z-20">
             <ChatWidget />
           </div>
-          
+
           {/* Mobile Chat Widget - popup style */}
           <div className="lg:hidden">
             <ChatWidget />
