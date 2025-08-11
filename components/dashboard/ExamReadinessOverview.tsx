@@ -44,7 +44,7 @@ export function ExamReadinessOverview() {
           </h2>
 
           {/* Circular Progress */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-4 lg:gap-6">
+          <div className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-6">
             <div className="relative flex-shrink-0">
               <svg
                 className="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 transform -rotate-90"
@@ -93,7 +93,7 @@ export function ExamReadinessOverview() {
               </div>
             </div>
 
-            <div className="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
+            <div className="text-xs sm:text-sm text-gray-600 text-center">
               <p>Based on your current progress and recent mock exams.</p>
             </div>
           </div>
@@ -136,34 +136,7 @@ export function ExamReadinessOverview() {
             </div>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
-            <div className="bg-blue-50 rounded-lg p-2 sm:p-3 lg:p-4 text-center">
-              <div className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-600">
-                12
-              </div>
-              <div className="text-xs sm:text-sm text-blue-700">Mock Exams</div>
-            </div>
-            <div className="bg-purple-50 rounded-lg p-2 sm:p-3 lg:p-4 text-center">
-              <div className="text-lg sm:text-xl lg:text-2xl font-bold text-purple-600">
-                156
-              </div>
-              <div className="text-xs sm:text-sm text-purple-700">
-                Study Hours
-              </div>
-            </div>
-          </div>
 
-          {/* Progress Indicator */}
-          <div className="mt-3 sm:mt-4 text-center sm:text-right">
-            <div className="text-xs sm:text-sm text-gray-500 mb-1">+5% from last week</div>
-            <div className="flex items-center justify-center sm:justify-end gap-1">
-              <div className="text-xs bg-gray-100 px-2 py-1 rounded">85%</div>
-              <div className="text-xs bg-gray-900 text-white px-2 py-1 rounded">
-                Review
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
