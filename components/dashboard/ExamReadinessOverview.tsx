@@ -1,10 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import {
-  ChevronDown,
-  ChevronUp,
-  Target,
   TrendingUp,
   Clock,
   BookOpen,
@@ -17,7 +13,6 @@ interface ModuleReadiness {
 }
 
 export function ExamReadinessOverview() {
-  const [isExpanded, setIsExpanded] = useState(false);
   const overallReadiness = 74;
 
   const moduleReadiness: ModuleReadiness[] = [
@@ -104,26 +99,40 @@ export function ExamReadinessOverview() {
           </div>
         </div>
 
-        {/* Right Section - Readiness Status and Stats */}
+        {/* Right Section - Exam Readiness Breakdown */}
         <div className="flex-1 max-w-full md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto md:mx-0">
-          {/* Readiness Status */}
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Target className="w-4 h-4 text-green-600" />
-              <span className="text-sm font-medium text-green-800">
-                Your Readiness Status
+          {/* Exam Readiness Breakdown */}
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
+            <div className="flex items-center gap-2 mb-3">
+              <BookOpen className="w-4 h-4 text-gray-600" />
+              <span className="text-sm font-medium text-gray-800">
+                Exam Readiness Breakdown
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-green-700 mb-2 sm:mb-3 break-words">
-              You're making great progress! Focus on Risk Response and Information & Communication to boost your score.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs">
-              <div className="bg-green-100 px-2 py-1 rounded text-center sm:text-left">
-                <span className="text-green-800">Strong Areas: 2</span>
-              </div>
-              <div className="bg-yellow-100 px-2 py-1 rounded text-center sm:text-left">
-                <span className="text-yellow-800">Needs Work: 2</span>
-              </div>
+            <div className="space-y-3">
+              {moduleReadiness.map((module, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between py-1"
+                >
+                  <span className="text-xs font-medium text-gray-700 flex-shrink-0">
+                    {module.name}
+                  </span>
+                  <div className="flex items-center gap-2 ml-2">
+                    <div className="w-16 bg-gray-200 rounded-full h-1.5">
+                      <div
+                        className="bg-gradient-to-r from-blue-500 to-purple-500 h-1.5 rounded-full transition-all duration-500"
+                        style={{ width: `${module.accuracy}%` }}
+                      />
+                    </div>
+                    <span
+                      className={`text-xs font-semibold ${module.color} w-8 text-right`}
+                    >
+                      {module.accuracy}%
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -158,50 +167,7 @@ export function ExamReadinessOverview() {
         </div>
       </div>
 
-      {/* Expandable Exam Readiness Breakdown */}
-      <div className="mt-6 border-t pt-4">
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center justify-between w-full text-left"
-        >
-          <span className="text-lg font-semibold text-gray-900">
-            Exam readiness breakdown
-          </span>
-          {isExpanded ? (
-            <ChevronUp className="w-5 h-5 text-gray-500" />
-          ) : (
-            <ChevronDown className="w-5 h-5 text-gray-500" />
-          )}
-        </button>
 
-        {isExpanded && (
-          <div className="mt-4 space-y-3">
-            {moduleReadiness.map((module, index) => (
-              <div
-                key={index}
-                className="flex flex-col sm:flex-row sm:items-center justify-between py-2 gap-2 sm:gap-3"
-              >
-                <span className="text-sm font-medium text-gray-700 flex-shrink-0 break-words">
-                  {module.name}
-                </span>
-                <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
-                  <div className="flex-1 min-w-0 sm:min-w-24 md:min-w-32 lg:min-w-40 bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
-                      style={{ width: `${module.accuracy}%` }}
-                    />
-                  </div>
-                  <span
-                    className={`text-sm font-semibold ${module.color} flex-shrink-0 w-10 text-right`}
-                  >
-                    {module.accuracy}%
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
     </div>
   );
 }
